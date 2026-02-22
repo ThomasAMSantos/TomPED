@@ -1,8 +1,8 @@
-# 🩺 Tomped — Gerador de Evolução Pediátrica
+# 🩺 TomPED — Gerador de Evolução Pediátrica
 
 > **Agilidade no plantão, precisão no prontuário.**
 
-O **Tomped** é uma *Single Page Application* (SPA) projetada para otimizar a rotina de médicos e internos na pediatria e neonatologia. O objetivo é eliminar a digitação repetitiva, gerando evoluções padronizadas e completas em segundos.
+O **TomPED** é uma *Single Page Application* (SPA) projetada para otimizar a rotina de médicos e internos na pediatria e neonatologia. O objetivo é eliminar a digitação repetitiva, gerando evoluções padronizadas e completas em segundos.
 
 ---
 
@@ -21,7 +21,7 @@ O **Tomped** é uma *Single Page Application* (SPA) projetada para otimizar a ro
 
 ## 🚀 Como Utilizar
 
-Como o Tomped é um projeto *client-side*, ele não exige instalação de dependências ou servidores.
+Como o TomPED é um projeto *client-side*, ele não exige instalação de dependências ou servidores.
 
 1. **Clone o repositório:**
 ```bash
@@ -54,7 +54,7 @@ O usuário é o único responsável pela revisão e exatidão dos dados antes da
 
 ## ☕ Apoie o Projeto
 
-O Tomped é **open-source** e gratuito. Se ele economizou seu tempo naquele plantão caótico, considere apoiar o desenvolvimento contínuo:
+O TomPED é **open-source** e gratuito. Se ele economizou seu tempo naquele plantão caótico, considere apoiar o desenvolvimento contínuo:
 
 * **PIX:** `SUA-CHAVE-PIX-AQUI`
 * **Feedback:** Sugestões são sempre bem-vindas via Issues ou Instagram.
@@ -67,6 +67,6 @@ Desenvolvido com ☕ e dedicação por **Thomás Machado**.
 
 ---
 
-*Ano de Criação: 2026 | Gurupi - TO*
+*Ano de Criação: 2026*
 
 ---
