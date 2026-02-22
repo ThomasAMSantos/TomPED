@@ -1,64 +1,72 @@
-🩺 Tomped - Gerador de Evolução Pediátrica
+# 🩺 Tomped — Gerador de Evolução Pediátrica
 
-Tomped é uma aplicação web de página única (Single Page Application) desenvolvida para otimizar e agilizar a rotina de médicos e acadêmicos na criação de evoluções diárias na pediatria e neonatologia.
+> **Agilidade no plantão, precisão no prontuário.**
 
-Criado com o intuito de reduzir o tempo de digitação repetitiva, o sistema permite gerar relatórios completos, padronizados e prontos para serem copiados para o prontuário oficial, tudo de forma rápida e segura.
+O **Tomped** é uma *Single Page Application* (SPA) projetada para otimizar a rotina de médicos e internos na pediatria e neonatologia. O objetivo é eliminar a digitação repetitiva, gerando evoluções padronizadas e completas em segundos.
 
-✨ Funcionalidades Principais
+---
 
-Cálculos Automáticos: Calcula automaticamente a Perda de Peso (%) e as Horas de Vida (HV) do recém-nascido com base na data e hora do nascimento em relação ao momento atual.
+## ✨ Funcionalidades Principais
 
-Armazenamento Offline (Local): Salva os dados dos pacientes diretamente no seu navegador (LocalStorage). O sistema funciona 100% offline, sem depender de internet e sem enviar dados sigilosos para a nuvem.
+| Recurso | Descrição |
+| --- | --- |
+| 🧮 **Cálculos Automáticos** | Perda de peso (%) e Horas de Vida (HV) calculados em tempo real. |
+| 🔒 **Privacidade Total** | Dados salvos via `LocalStorage`. Nada é enviado para servidores externos. |
+| 🧠 **Formulários Dinâmicos** | Campos que se adaptam (ex: exibe motivo da cesárea apenas se PC for selecionado). |
+| 📝 **Templates Prontos** | Modelos de exame físico para RNT e RNPT inclusos. |
+| ⚡ **Quick Tags** | Adicione achados como "Icterícia Z1" ou "Sopro" com apenas um clique. |
+| 🌓 **UI Adaptativa** | Suporte nativo a Dark e Light Mode para conforto visual nos plantões. |
 
-Preenchimento Inteligente: Campos adaptáveis, como a exibição do motivo da cesárea apenas quando "Parto Cesárea (PC)" é selecionado.
+---
 
-Modelos de Exame Físico: Inclui templates prontos de exame físico normal para Recém-Nascidos a Termo (RNT) e Pré-Termo (RNPT).
+## 🚀 Como Utilizar
 
-Tags Rápidas (Quick Tags): Botões de um clique para adicionar achados comuns ao exame físico (ex: Icterícia Z1, Sopro, Desconforto Respiratório).
+Como o Tomped é um projeto *client-side*, ele não exige instalação de dependências ou servidores.
 
-Modo Escuro e Claro (Dark/Light Mode): Interface moderna que respeita a preferência do seu sistema para não cansar a vista durante os plantões noturnos.
+1. **Clone o repositório:**
+```bash
+git clone https://github.com/ThomasAMSantos/TomPED.git
 
-Cópia Rápida: Um clique para copiar toda a evolução gerada para a área de transferência.
+```
 
-🚀 Como Usar
 
-O Tomped não requer instalação complexa, servidores ou banco de dados. Ele roda diretamente no seu navegador!
+2. **Abra o arquivo:** Localize o `index.html` e abra-o em qualquer navegador moderno.
+3. **Preencha e Gere:** Insira os dados, clique em `📄 Gerar Documento` e use o botão `📋 Copiar` para transferir o texto para o prontuário oficial (PEP).
 
-Baixe o arquivo: Faça o download do arquivo relatorio_pediatria_v2.html (ou copie o código e salve em um arquivo com final .html).
+---
 
-Abra no Navegador: Dê um duplo clique no arquivo salvo. Ele abrirá no seu navegador padrão (Chrome, Edge, Safari, etc.), mesmo sem acesso à internet.
+## 🛠️ Tecnologias Utilizadas
 
-Preencha os Dados: Insira as informações do paciente nos campos organizados. Utilize os menus suspensos e botões rápidos para ganhar tempo.
+Este projeto foi construído focando em performance e portabilidade:
 
-Gere o Documento: Clique em "📄 Gerar Documento". O texto formatado aparecerá na caixa preta ao lado (ou abaixo, no celular).
+* **HTML5** & **CSS3**: Estrutura e estilização responsiva.
+* **JavaScript (Vanilla)**: Lógica de cálculos, manipulação de DOM e persistência local.
+* **LocalStorage API**: Para armazenamento persistente de dados do paciente sem necessidade de Backend.
 
-Copie e Cole: Clique em "📋 Copiar" e cole no prontuário eletrônico do seu hospital.
+---
 
-Salve o Paciente (Opcional): Clique em "💾 Salvar Paciente" para deixar os dados gravados na lista de plantão. Você poderá editá-los e gerar uma nova evolução no dia seguinte.
+## ⚖️ Aviso Legal
 
-💖 100% Gratuito (Mas aceita aquele café!)
+**Importante:** Esta ferramenta é um **auxiliar de digitação**. Ela não substitui o raciocínio clínico.
+O usuário é o único responsável pela revisão e exatidão dos dados antes da inserção em prontuários médicos legais. O desenvolvedor não se responsabiliza por falhas de cálculo ou omissões.
 
-O Tomped é um projeto desenvolvido em 2026 e disponibilizado de forma 100% gratuita para ajudar a comunidade médica a ter mais tempo para o que realmente importa: cuidar dos pequenos pacientes.
+---
 
-Não há mensalidades, anúncios ou recursos bloqueados.
+## ☕ Apoie o Projeto
 
-No entanto, se essa ferramenta tem salvado a sua vida nos plantões e você quiser apoiar o criador, doações são muito bem-vindas! Considere pagar um cafézinho para ajudar a manter o desenvolvimento de mais ferramentas como esta:
+O Tomped é **open-source** e gratuito. Se ele economizou seu tempo naquele plantão caótico, considere apoiar o desenvolvimento contínuo:
 
-☕ Apoie via PIX: [Sua-Chave-Pix-Aqui]
-(Ou insira seu link do Apoia.se, BuyMeACoffee, etc)
+* **PIX:** `SUA-CHAVE-PIX-AQUI`
+* **Feedback:** Sugestões são sempre bem-vindas via Issues ou Instagram.
 
-⚖️ Aviso Legal e Responsabilidade
+---
 
-Atenção: Esta ferramenta tem como finalidade única auxiliar e agilizar a rotina de digitação, não substituindo em momento algum o raciocínio clínico.
+## 👨‍💻 Autor
 
-O criador não se responsabiliza por possíveis erros, omissões ou falhas nos cálculos automáticos. Cada usuário/profissional é inteira e exclusivamente responsável por ler, revisar e conferir a exatidão de todos os dados inseridos e gerados antes de assiná-los e anexá-los a qualquer prontuário oficial e legal.
+Desenvolvido com ☕ e dedicação por **Thomás Machado**.
 
-👨‍💻 Créditos
+---
 
-Desenvolvido com dedicação por Thomás Machado.
+*Ano de Criação: 2026 | Gurupi - TO*
 
-Instagram: @thomask_machado
-
-Ano de Criação: 2026
-
-Todos os direitos autorais reservados ao criador.
+---
