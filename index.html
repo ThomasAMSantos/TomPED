@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomped | Gerador de Evolução</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Variáveis Globais (Modo Claro) */
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-body: #f1f5f9;
+            --bg-panel: #ffffff;
+            --bg-input: #f8fafc;
+            --bg-output: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --border-focus: #93c5fd;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            --success: #10b981;
+            --danger: #ef4444;
+            --radius: 12px;
+        }
+
+        /* Variáveis (Modo Escuro) */
+        [data-theme="dark"] {
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --bg-body: #0f172a;
+            --bg-panel: #1e293b;
+            --bg-input: #0f172a;
+            --bg-output: #020617;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --border-focus: #3b82f6;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px 15px;
+            line-height: 1.5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .app-container {
+            max-width: 1024px;
+            margin: 0 auto;
+            display: grid;
+            gap: 24px;
+        }
+
+        .panel {
+            background-color: var(--bg-panel);
+            border-radius: var(--radius);
+            padding: 28px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* --- Header & Logo --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icons {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            gap: 4px;
+        }
+        
+        .logo-text h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+        
+        .logo-text span {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* --- Toggle Tema --- */
+        .theme-toggle {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .theme-toggle:hover {
+            background: var(--border-color);
+        }
+
+        /* --- Tipografia & Grids --- */
+        h2 { font-size: 1.25rem; margin: 0 0 16px 0; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+        h3 { font-size: 1.05rem; margin: 24px 0 12px 0; color: var(--primary); font-weight: 600; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px;}
+
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        /* --- Inputs --- */
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--bg-input);
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+            background-color: var(--bg-panel);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 1em;
+            padding-right: 32px;
+        }
+
+        textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
+
+        .readonly-calc {
+            background-color: transparent;
+            border-style: dashed;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: not-allowed;
+        }
+
+        /* --- Botões --- */
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+        .btn-success { background-color: var(--success); color: white; }
+        .btn-success:hover { background-color: #059669; }
+        .btn-danger { background-color: var(--danger); color: white; padding: 6px 10px; }
+        .btn-danger:hover { background-color: #dc2626; }
+        .btn-outline { background-color: transparent; border: 1px solid var(--border-color); color: var(--text-main); }
+        .btn-outline:hover { background-color: var(--bg-input); }
+
+        /* --- Tags de Exame Físico --- */
+        .quick-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+        .tag {
+            background: transparent; 
+            color: var(--primary); 
+            border: 1px solid var(--primary); 
+            padding: 4px 12px;
+            border-radius: 20px; 
+            font-size: 0.8rem; 
+        }
+        .tag:hover { 
+            background: var(--primary); 
+            color: white;
+        }
+
+        .actions-bar {
+            display: flex; gap: 12px; margin-top: 32px; padding-top: 24px;
+            border-top: 1px solid var(--border-color); flex-wrap: wrap;
+        }
+
+        /* --- Output Text --- */
+        #output {
+            background: var(--bg-output); 
+            color: var(--text-main); 
+            padding: 24px; 
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace; 
+            white-space: pre-wrap;
+            font-size: 0.95rem; 
+            line-height: 1.6;
+            min-height: 200px; 
+            border: 1px solid var(--border-color);
+        }
+
+        /* --- Lista Salvos --- */
+        .saved-list { display: grid; gap: 12px; }
+        .saved-card {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px; 
+            border: 1px solid var(--border-color); 
+            border-radius: 8px;
+            background: var(--bg-input);
+        }
+        .saved-info strong { color: var(--text-main); font-size: 1.05rem; }
+        .saved-info small { display: block; color: var(--text-muted); margin-top: 4px; }
+        .saved-actions { display: flex; gap: 8px; }
+
+        /* Toast */
+        #toast {
+            visibility: hidden; min-width: 250px; 
+            background-color: var(--text-main); color: var(--bg-panel);
+            text-align: center; border-radius: 8px; 
+            padding: 12px 16px; position: fixed;
+            z-index: 1000; left: 50%; bottom: 30px; 
+            transform: translateX(-50%) translateY(20px);
+            font-weight: 500; opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        #toast.show { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* --- Footer & Creditos --- */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding: 24px 10px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        .footer p {
+            margin: 6px 0;
+        }
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .footer a:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+        .disclaimer {
+            font-size: 0.75rem;
+            margin-top: 14px;
+            opacity: 0.8;
+            font-style: italic;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .mt-3 { margin-top: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <!-- ÁREA DE PREENCHIMENTO -->
+    <div class="panel">
+        
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo-icons">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5c.67 0 1.35.09 2 .26 1.78-2 5.03-2.84 6.42-2.26 1.4.58-.42 7-.42 7 .57 1.07 1 2.24 1 3.44C21 17.9 16.97 21 12 21s-9-3.1-9-7.56c0-1.25.5-2.4 1-3.44 0 0-1.82-6.42-.42-7 1.38-.58 4.64.26 6.42 2.26.65-.17 1.33-.26 2-.26z"/><path d="M9 14h.01"/><path d="M15 14h.01"/><path d="M12 16c-.5 0-1-.17-1-.5"/></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 1.5-2 1.5c-1.2 0-2.5.5-3.2 1.2"/></svg>
+                </div>
+                <div class="logo-text">
+                    <h1>Tomped</h1>
+                    <span>Evolução Pediátrica</span>
+                </div>
+            </div>
+
+            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+                <span id="themeIcon">🌙</span> 
+                <span id="themeText">Modo Escuro</span>
+            </button>
+        </div>
+
+        <form id="reportForm">
+            <input type="hidden" id="reportId">
+            
+            <div class="grid-2">
+                <div><label>Leito</label><input type="text" id="leito" placeholder="Ex: 1.1"></div>
+                <div><label>Nome do Paciente</label><input type="text" id="nome" placeholder="RN DE..."></div>
+            </div>
+
+            <h3>Nascimento e Antropometria</h3>
+            <div class="grid-4 mt-3">
+                <div>
+                    <label>Tipo de Parto</label>
+                    <select id="tipoParto" onchange="verificarTipoParto()">
+                        <option value="PC">Parto Cesárea (PC)</option>
+                        <option value="PN">Parto Normal (PN)</option>
+                        <option value="Fórceps">Fórceps</option>
+                    </select>
+                </div>
+                <div id="containerMotivoPC">
+                    <label>Motivo da Cesárea</label>
+                    <input type="text" id="motivoPC" placeholder="Ex: Desproporção, DHEG...">
+                </div>
+                <div><label>Data Nascimento</label><input type="date" id="dataNasc" onchange="calcularHV()"></div>
+                <div><label>Hora Nascimento</label><input type="time" id="horaNasc" onchange="calcularHV()"></div>
+                <div><label>Horas de Vida (HV)</label><input type="text" id="hv" class="readonly-calc" readonly placeholder="Auto"></div>
+            </div>
+            
+            <div class="grid-4 mt-3">
+                <div><label>Apgar</label><input type="text" id="apgar" placeholder="Ex: 8/10"></div>
+                <div><label>Capurro</label><input type="text" id="capurro" placeholder="Ex: 40s +3d"></div>
+                <div><label>Estatura (cm)</label><input type="number" id="estatura" placeholder="49"></div>
+                <div><label>Peso Nascer (g)</label><input type="number" id="pn" oninput="calcularPerda()" placeholder="3760"></div>
+            </div>
+
+            <div class="grid-2 mt-3">
+                <div><label>PC (Perímetro Cefálico - cm)</label><input type="number" id="pc" placeholder="36"></div>
+                <div><label>PT (Perímetro Torácico - cm)</label><input type="number" id="pt" placeholder="35"></div>
+            </div>
+
+            <div class="grid-2 mt-3">
+                <div><label>Peso de Hoje (g)</label><input type="number" id="pesoHoje" oninput="calcularPerda()" placeholder="3660"></div>
+                <div><label>% Perda de Peso</label><input type="text" id="perdaPeso" class="readonly-calc" readonly placeholder="Calculado auto"></div>
+            </div>
+
+            <h3>Sorologias e Tipagem</h3>
+            <div class="grid-3 mt-3">
+                <div>
+                    <label>Tipo Sanguíneo Mãe</label>
+                    <select id="maeTS"><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option><option>Desconhecido</option></select>
+                </div>
+                <div>
+                    <label>Mãe VDRL</label>
+                    <select id="maeVDRL"><option>NR</option><option>Reagente</option><option>Não Realizado</option></select>
+                </div>
+                <div>
+                    <label>Mãe Teste Rápido</label>
+                    <select id="maeTR"><option>NR</option><option>Reagente</option><option>Não Realizado</option></select>
+                </div>
+            </div>
+            <div class="grid-3 mt-3">
+                <div>
+                    <label>Tipo Sanguíneo RN</label>
+                    <select id="rnTS"><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option><option>Em andamento</option></select>
+                </div>
+                <div>
+                    <label>RN VDRL</label>
+                    <select id="rnVDRL"><option>NR</option><option>Reagente</option><option>Não Realizado</option></select>
+                </div>
+                <div>
+                    <label>RN Teste Rápido</label>
+                    <select id="rnTR"><option>NR</option><option>Reagente</option><option>Não Realizado</option></select>
+                </div>
+            </div>
+
+            <h3>Triagem e Vacinas</h3>
+            <div class="grid-4 mt-3">
+                <div><label>Coraçãozinho</label><select id="coracaozinho"><option>Não Realizado</option><option>Realizado, sem alterações</option><option>Alterado</option></select></div>
+                <div><label>Orelhinha</label><select id="orelhinha"><option>Não Realizado</option><option>Realizado, sem alterações</option><option>Alterado</option></select></div>
+                <div><label>Olhinho</label><select id="olhinho"><option>Realizado, sem alterações</option><option>Não Realizado</option><option>Alterado</option></select></div>
+                <div><label>Linguinha</label><select id="linguinha"><option>Não Realizado</option><option>Realizado, sem alterações</option><option>Alterado</option></select></div>
+            </div>
+            <div class="mt-3">
+                <label>Vacinas (BCG e Hep B)</label>
+                <select id="vacinas">
+                    <option>Realizados</option>
+                    <option>Não Realizados</option>
+                    <option>Apenas BCG realizada</option>
+                    <option>Apenas Hep B realizada</option>
+                </select>
+            </div>
+
+            <h3>Textos Clínicos</h3>
+            <label>Hipótese Diagnóstica (HD)</label>
+            <div class="grid-3 mt-3">
+                <div>
+                    <select id="hdIdade">
+                        <option value="RNT">RNT</option>
+                        <option value="RNPT">RNPT</option>
+                        <option value="RN Pós-termo">RN Pós-termo</option>
+                    </select>
+                </div>
+                <div>
+                    <select id="hdPeso">
+                        <option value="AIG">AIG</option>
+                        <option value="PIG">PIG</option>
+                        <option value="GIG">GIG</option>
+                    </select>
+                </div>
+                <div>
+                    <select id="hdSexo">
+                        <option value="FEMININO">Feminino</option>
+                        <option value="MASCULINO">Masculino</option>
+                        <option value="INDETERMINADO">Indeterminado</option>
+                    </select>
+                </div>
+            </div>
+
+            <label class="mt-3">Evolução</label>
+            <textarea id="evolucao">RN eupneico em AA, RN com boa pega e sucção, em aleitamento materno exclusivo, mãe com boa produção láctea. Diurese e evacuação presentes fisiologicamente.</textarea>
+
+            <div class="grid-2 mt-3">
+                <div>
+                    <label>Modelos de Exame Físico</label>
+                    <select id="modeloExameFisico" onchange="mudarModeloExame()">
+                        <option value="RNT">Padrão Normal (RNT)</option>
+                        <option value="RNPT">Padrão Normal (RNPT)</option>
+                        <option value="BRANCO">Em Branco (Digitar manualmente)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="quick-tags mt-3">
+                <button type="button" class="tag" onclick="addTag('exameFisico', 'Icterícia Zona I')">+ Icterícia Z1</button>
+                <button type="button" class="tag" onclick="addTag('exameFisico', 'Sopro sistólico pancardíaco')">+ Sopro</button>
+                <button type="button" class="tag" onclick="addTag('exameFisico', 'Desconforto respiratório leve')">+ Desconf. Resp.</button>
+                <button type="button" class="tag" onclick="addTag('exameFisico', 'Coto umbilical com secreção')">+ Coto Alterado</button>
+            </div>
+            <textarea id="exameFisico">BEG, eupneico, ativo e reativo, acianótico, afebril, anictérico
+Bregma plana e normotensa. Orelhas normas implantadas.
+Palato íntegro. Clavículas íntegras.
+AP: MV+ SRA
+ACV: BNF RCR 2T SS
+Abdome: simétrico, normotimpânico, sem visceromegalias, sem sinais de defesa abdominal. Coto umbilical gelatinoso com bom aspecto, sem sinais flogísticos.
+AGU: Genitália típica. Ânus pérvio.
+Extremidades: simétricas. Hálux sem alteração. Ortolani Negativo bilateralmente.
+Reflexos primitivos presentes e normais.
+PELE: sem lesões exantemáticas</textarea>
+
+            <label class="mt-3">Conduta</label>
+            <textarea id="conduta" style="min-height: 80px;">1- Aguardo tempo hábil</textarea>
+
+            <div class="actions-bar">
+                <button type="button" class="btn-primary" onclick="gerarRelatorio()">📄 Gerar Documento</button>
+                <button type="button" class="btn-success" onclick="salvarRelatorio()">💾 Salvar Paciente</button>
+                <button type="button" class="btn-outline" onclick="limparFormulario()">Limpar Tudo</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ÁREA DE SAÍDA -->
+    <div class="panel">
+        <h2>
+            Documento Gerado
+            <button type="button" class="btn-primary" onclick="copiarTexto()" style="font-size: 0.85rem; padding: 6px 12px;">📋 Copiar</button>
+        </h2>
+        <div id="output">Os dados gerados aparecerão aqui em formato final...</div>
+    </div>
+
+    <!-- LISTA DE PACIENTES SALVOS -->
+    <div class="panel">
+        <h2 style="border: none; margin-bottom: 0;">Pacientes no Plantão</h2>
+        <div id="savedList" class="saved-list mt-3">
+            <!-- Itens injetados via JS -->
+        </div>
+    </div>
+
+    <!-- RODAPÉ & AVISO LEGAL -->
+    <div class="footer">
+        <p>
+            <strong>© 2026 Thomás Machado</strong>. Todos os direitos autorais reservados.
+        </p>
+        <p>
+            Instagram: <a href="https://instagram.com/thomask_machado" target="_blank">@thomask_machado</a>
+        </p>
+        <p class="disclaimer">
+            Aviso Legal: Esta ferramenta tem como finalidade auxiliar e agilizar a rotina, não substituindo o raciocínio clínico. O criador não se responsabiliza por possíveis erros, omissões ou falhas nos cálculos. Cada usuário/profissional é inteiramente responsável por conferir a exatidão dos dados inseridos e gerados antes de anexá-los a qualquer prontuário oficial.
+        </p>
+    </div>
+</div>
+
+<div id="toast">Mensagem</div>
+
+<script>
+    // --- 0. GESTÃO DO TEMA (DARK/LIGHT MODE) --- //
+    function initTheme() {
+        const savedTheme = localStorage.getItem('tomped_theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            atualizarBotaoTema('dark');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            atualizarBotaoTema('light');
+        }
+    }
+
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('tomped_theme', newTheme);
+        atualizarBotaoTema(newTheme);
+    }
+
+    function atualizarBotaoTema(theme) {
+        const icon = document.getElementById('themeIcon');
+        const text = document.getElementById('themeText');
+        if (theme === 'dark') {
+            icon.textContent = '☀️';
+            text.textContent = 'Modo Claro';
+        } else {
+            icon.textContent = '🌙';
+            text.textContent = 'Modo Escuro';
+        }
+    }
+
+    // --- 1. FUNÇÕES DE CÁLCULO E FORMULÁRIO --- //
+
+    function verificarTipoParto() {
+        const tipo = document.getElementById('tipoParto').value;
+        const container = document.getElementById('containerMotivoPC');
+        if (tipo === 'PC') {
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+            document.getElementById('motivoPC').value = ''; 
+        }
+    }
+
+    function mudarModeloExame() {
+        const modelo = document.getElementById('modeloExameFisico').value;
+        const textarea = document.getElementById('exameFisico');
+        
+        if (modelo === 'RNT') {
+            textarea.value = "BEG, eupneico, ativo e reativo, acianótico, afebril, anictérico\nBregma plana e normotensa. Orelhas normas implantadas.\nPalato íntegro. Clavículas íntegras.\nAP: MV+ SRA\nACV: BNF RCR 2T SS\nAbdome: simétrico, normotimpânico, sem visceromegalias, sem sinais de defesa abdominal. Coto umbilical gelatinoso com bom aspecto, sem sinais flogísticos.\nAGU: Genitália típica. Ânus pérvio.\nExtremidades: simétricas. Hálux sem alteração. Ortolani Negativo bilateralmente.\nReflexos primitivos presentes e normais.\nPELE: sem lesões exantemáticas";
+        } else if (modelo === 'RNPT') {
+            textarea.value = "REG/BEG, eupneico/taquipneico leve, reativo ao manuseio, acianótico, afebril, anictérico\nBregma plana e normotensa. Orelhas com cartilagem fina.\nPalato íntegro. Clavículas íntegras.\nAP: MV+ SRA (ou leve tiragem intercostal)\nACV: BNF RCR 2T SS\nAbdome: simétrico, flácido, sem visceromegalias. Coto umbilical com bom aspecto.\nAGU: Genitália típica. Ânus pérvio.\nExtremidades: simétricas, tônus e reflexos adequados para a idade gestacional.\nPELE: fina, gelatinosa, sem lesões.";
+        } else if (modelo === 'BRANCO') {
+            textarea.value = "";
+        }
+    }
+
+    function calcularPerda() {
+        const pn = parseFloat(document.getElementById('pn').value);
+        const pesoHoje = parseFloat(document.getElementById('pesoHoje').value);
+        const campoPerda = document.getElementById('perdaPeso');
+        
+        if (pn && pesoHoje) {
+            const perda = ((pn - pesoHoje) / pn) * 100;
+            if(perda < 0) {
+                campoPerda.value = "Ganho de " + Math.abs(perda).toFixed(2) + '%';
+                campoPerda.style.color = "var(--success)";
+            } else {
+                campoPerda.value = perda.toFixed(2) + '%';
+                campoPerda.style.color = "var(--danger)";
+            }
+        } else {
+            campoPerda.value = '';
+            campoPerda.style.color = "var(--primary)";
+        }
+    }
+
+    function calcularHV() {
+        const dataNasc = document.getElementById('dataNasc').value;
+        const horaNasc = document.getElementById('horaNasc').value;
+        const campoHV = document.getElementById('hv');
+
+        if(dataNasc && horaNasc) {
+            const nascimento = new Date(`${dataNasc}T${horaNasc}`);
+            const agora = new Date(); 
+            const diferencaMs = agora - nascimento;
+            
+            if(diferencaMs < 0) {
+                campoHV.value = "Data futura!";
+                campoHV.style.color = "var(--danger)";
+                return;
+            }
+
+            const horasDeVida = Math.floor(diferencaMs / (1000 * 60 * 60));
+            campoHV.value = horasDeVida + "H";
+            campoHV.style.color = "var(--primary)";
+        }
+    }
+
+    function addTag(targetId, text) {
+        const textarea = document.getElementById(targetId);
+        textarea.value = text + ". " + textarea.value;
+        mostrarToast("Adicionado: " + text);
+    }
+
+    // --- 2. GERAÇÃO DO TEXTO --- //
+
+    function formatarData(dataString) {
+        if(!dataString) return '___';
+        const partes = dataString.split('-');
+        if(partes.length === 3) return `${partes[2]}/${partes[1]}/${partes[0].substring(2)}`; 
+        return dataString;
+    }
+
+    function gerarTexto() {
+        calcularPerda();
+        calcularHV();
+
+        const getVal = (id) => document.getElementById(id).value || '___';
+        
+        let tipoPartoStr = getVal('tipoParto');
+        if (tipoPartoStr === 'PC') {
+            const motivo = document.getElementById('motivoPC').value;
+            if (motivo) {
+                tipoPartoStr += ` (Motivo: ${motivo})`;
+            }
+        }
+
+        let texto = `LEITO ${getVal('leito')} - ${getVal('nome')}
+
+RN nascido de ${tipoPartoStr} ${formatarData(getVal('dataNasc'))}, às ${getVal('horaNasc')}H - HV: ${getVal('hv')}
+Apgar: ${getVal('apgar')} Capurro: ${getVal('capurro')}
+PN: ${getVal('pn')}g E: ${getVal('estatura')}cm PC: ${getVal('pc')}cm PT: ${getVal('pt')}cm
+Mãe - TS: ${getVal('maeTS')} / VDRL: ${getVal('maeVDRL')} / Teste rápido: ${getVal('maeTR')}
+RN - TS: ${getVal('rnTS')} / VDRL: ${getVal('rnVDRL')} / Teste rápido: ${getVal('rnTR')}
+
+HD: ${getVal('hdIdade')}, ${getVal('hdPeso')}, SEXO ${getVal('hdSexo')}
+
+TESTES DE TRIAGEM NEONATAL:
+Coraçãozinho: ${getVal('coracaozinho')}
+Orelhinha: ${getVal('orelhinha')}
+Olhinho: ${getVal('olhinho')}
+Linguinha: ${getVal('linguinha')}
+
+VACINAS BCG e HEP B: ${getVal('vacinas')}
+
+EVOLUÇÃO: ${getVal('evolucao')}
+
+PESO DE HOJE: ${getVal('pesoHoje')}g - Perda de peso: ${getVal('perdaPeso')}
+
+EXAME FÍSICO:
+${getVal('exameFisico')}
+
+CONDUTA:
+${getVal('conduta')}`;
+
+        return texto;
+    }
+
+    function gerarRelatorio() {
+        document.getElementById('output').textContent = gerarTexto();
+        window.scrollTo({ top: document.getElementById('output').offsetTop - 20, behavior: 'smooth' });
+    }
+
+    function copiarTexto() {
+        const texto = document.getElementById('output').textContent;
+        if(texto.includes('Os dados gerados aparecerão')) {
+            mostrarToast("⚠️ Gere a evolução primeiro!");
+            return;
+        }
+        navigator.clipboard.writeText(texto).then(() => {
+            mostrarToast("✅ Evolução copiada com sucesso!");
+        });
+    }
+
+    // --- 3. SISTEMA DE SALVAMENTO (LOCALSTORAGE) --- //
+
+    function salvarRelatorio() {
+        gerarRelatorio();
+        const id = document.getElementById('reportId').value || Date.now().toString();
+        
+        const relatorio = {
+            id: id,
+            leito: document.getElementById('leito').value,
+            nome: document.getElementById('nome').value || 'Sem Nome Cadastrado',
+            horaSalvo: new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
+            formData: {}
+        };
+
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            if(el.id) relatorio.formData[el.id] = el.value;
+        });
+
+        let salvos = JSON.parse(localStorage.getItem('plantaoPediatria') || '[]');
+        const index = salvos.findIndex(r => r.id === id);
+        if(index > -1) salvos[index] = relatorio;
+        else salvos.push(relatorio);
+
+        localStorage.setItem('plantaoPediatria', JSON.stringify(salvos));
+        document.getElementById('reportId').value = id; 
+        
+        mostrarToast("💾 Paciente salvo na lista!");
+        carregarSalvos();
+    }
+
+    function carregarSalvos() {
+        const salvos = JSON.parse(localStorage.getItem('plantaoPediatria') || '[]');
+        const container = document.getElementById('savedList');
+        
+        if(salvos.length === 0) {
+            container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">Nenhum paciente salvo no plantão atual.</p>';
+            return;
+        }
+
+        container.innerHTML = salvos.map(r => `
+            <div class="saved-card">
+                <div class="saved-info">
+                    <strong>Leito ${r.leito || '--'}</strong> - ${r.nome}
+                    <small>Atualizado às ${r.horaSalvo}</small>
+                </div>
+                <div class="saved-actions">
+                    <button type="button" class="btn-outline" style="padding: 6px 12px; font-size: 0.85rem;" onclick="editar('${r.id}')">✏️ Editar</button>
+                    <button type="button" class="btn-danger" onclick="excluir('${r.id}')">🗑️</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function editar(id) {
+        const salvos = JSON.parse(localStorage.getItem('plantaoPediatria') || '[]');
+        const relatorio = salvos.find(r => r.id === id);
+        if(relatorio) {
+            for (let key in relatorio.formData) {
+                const el = document.getElementById(key);
+                if(el) el.value = relatorio.formData[key];
+            }
+            verificarTipoParto();
+            gerarRelatorio();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            mostrarToast("✏️ Paciente carregado para edição.");
+        }
+    }
+
+    function excluir(id) {
+        if(confirm('Tem certeza que deseja apagar este paciente do plantão?')) {
+            let salvos = JSON.parse(localStorage.getItem('plantaoPediatria') || '[]');
+            salvos = salvos.filter(r => r.id !== id);
+            localStorage.setItem('plantaoPediatria', JSON.stringify(salvos));
+            carregarSalvos();
+            mostrarToast("🗑️ Paciente removido.");
+        }
+    }
+
+    function limparFormulario() {
+        if(confirm('Isso vai apagar os dados da tela atual. Confirmar?')) {
+            document.getElementById('reportForm').reset();
+            document.getElementById('reportId').value = '';
+            document.getElementById('output').textContent = 'Os dados gerados aparecerão aqui em formato final...';
+            document.getElementById('hv').value = '';
+            document.getElementById('perdaPeso').value = '';
+            
+            document.getElementById('modeloExameFisico').value = 'RNT';
+            mudarModeloExame(); 
+            
+            document.getElementById('evolucao').value = "RN eupneico em AA, RN com boa pega e sucção, em aleitamento materno exclusivo, mãe com boa produção láctea. Diurese e evacuação presentes fisiologicamente.";
+            document.getElementById('conduta').value = "1- Aguardo tempo hábil";
+            
+            verificarTipoParto();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    function mostrarToast(mensagem) {
+        const toast = document.getElementById("toast");
+        toast.textContent = mensagem;
+        
+        toast.classList.remove("show");
+        void toast.offsetWidth; // Force reflow
+        toast.classList.add("show");
+        
+        setTimeout(function(){ toast.classList.remove("show"); }, 3000);
+    }
+
+    window.onload = function() {
+        initTheme(); // Inicializa tema escuro/claro
+        carregarSalvos();
+        
+        const hoje = new Date();
+        const dataFormatada = hoje.toISOString().split('T')[0];
+        document.getElementById('dataNasc').value = dataFormatada;
+        
+        verificarTipoParto();
+    };
+</script>
+
+</body>
+</html>
