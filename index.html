@@ -266,6 +266,10 @@
 
         /* --- Footer & Creditos --- */
         .footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
             margin-top: 20px;
             padding: 24px 10px;
@@ -292,8 +296,6 @@
             opacity: 0.8;
             font-style: italic;
             max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .mt-3 { margin-top: 16px; }
@@ -303,7 +305,6 @@
 
 <div class="app-container">
     
-    <!-- ÁREA DE PREENCHIMENTO -->
     <div class="panel">
         
         <div class="header">
@@ -365,7 +366,7 @@
 
             <div class="grid-2 mt-3">
                 <div><label>Peso de Hoje (g)</label><input type="number" id="pesoHoje" oninput="calcularPerda()" placeholder="3660"></div>
-                <div><label>% Perda de Peso</label><input type="text" id="perdaPeso" class="readonly-calc" readonly placeholder="Calculado auto"></div>
+                <div><label>% Variação de Peso</label><input type="text" id="perdaPeso" class="readonly-calc" readonly placeholder="Calculado auto"></div>
             </div>
 
             <h3>Sorologias e Tipagem</h3>
@@ -399,11 +400,14 @@
             </div>
 
             <h3>Triagem e Vacinas</h3>
-            <div class="grid-4 mt-3">
+            <div class="grid-3 mt-3">
                 <div><label>Coraçãozinho</label><select id="coracaozinho"><option>Não Realizado</option><option>Realizado, sem alterações</option><option>Alterado</option></select></div>
                 <div><label>Orelhinha</label><select id="orelhinha"><option>Não Realizado</option><option>Realizado, sem alterações</option><option>Alterado</option></select></div>
-                <div><label>Olhinho</label><select id="olhinho"><option>Realizado, sem alterações</option><option>Não Realizado</option><option>Alterado</option></select></div>
+                <div><label>Olhinho</label><select id="olhinho"><option>Não Realizado</option><option>Realizado, sem alterações</option><option>Alterado</option></select></div>
+            </div>
+            <div class="grid-2 mt-3">
                 <div><label>Linguinha</label><select id="linguinha"><option>Não Realizado</option><option>Realizado, sem alterações</option><option>Alterado</option></select></div>
+                <div><label>Pezinho</label><select id="pezinho"><option>Não Realizado</option><option>Realizado, sem alterações</option><option>Alterado</option></select></div>
             </div>
             <div class="mt-3">
                 <label>Vacinas (BCG e Hep B)</label>
@@ -483,24 +487,31 @@ PELE: sem lesões exantemáticas</textarea>
         </form>
     </div>
 
-    <!-- ÁREA DE SAÍDA -->
     <div class="panel">
         <h2>
             Documento Gerado
-            <button type="button" class="btn-primary" onclick="copiarTexto()" style="font-size: 0.85rem; padding: 6px 12px;">📋 Copiar</button>
+            <div style="display: flex; gap: 8px;">
+                <button type="button" class="btn-primary" onclick="copiarTexto()" style="font-size: 0.85rem; padding: 6px 12px;">📋 Copiar</button>
+                <button type="button" class="btn-outline" onclick="imprimirTexto()" style="font-size: 0.85rem; padding: 6px 12px;">🖨️ Imprimir</button>
+            </div>
         </h2>
         <div id="output">Os dados gerados aparecerão aqui em formato final...</div>
     </div>
 
-    <!-- LISTA DE PACIENTES SALVOS -->
     <div class="panel">
-        <h2 style="border: none; margin-bottom: 0;">Pacientes no Plantão</h2>
+        <h2 style="border: none; margin-bottom: 0;">
+            Pacientes no Plantão
+            <div style="display: flex; gap: 8px;">
+                <button type="button" class="btn-outline" onclick="acionarImportacao()" style="font-size: 0.85rem; padding: 6px 12px;">📂 Importar</button>
+                <button type="button" class="btn-outline" onclick="exportarDados()" style="font-size: 0.85rem; padding: 6px 12px;">💾 Exportar</button>
+            </div>
+        </h2>
+        <input type="file" id="arquivoImportacao" accept=".json" style="display: none;" onchange="importarDados(event)">
+        
         <div id="savedList" class="saved-list mt-3">
-            <!-- Itens injetados via JS -->
-        </div>
+            </div>
     </div>
 
-    <!-- RODAPÉ & AVISO LEGAL -->
     <div class="footer">
         <p>
             <strong>© 2026 Thomás Machado</strong>. Todos os direitos autorais reservados.
@@ -589,7 +600,7 @@ PELE: sem lesões exantemáticas</textarea>
                 campoPerda.value = "Ganho de " + Math.abs(perda).toFixed(2) + '%';
                 campoPerda.style.color = "var(--success)";
             } else {
-                campoPerda.value = perda.toFixed(2) + '%';
+                campoPerda.value = "Perda de " + perda.toFixed(2) + '%';
                 campoPerda.style.color = "var(--danger)";
             }
         } else {
@@ -626,7 +637,7 @@ PELE: sem lesões exantemáticas</textarea>
         mostrarToast("Adicionado: " + text);
     }
 
-    // --- 2. GERAÇÃO DO TEXTO --- //
+    // --- 2. GERAÇÃO DO TEXTO E IMPRESSÃO --- //
 
     function formatarData(dataString) {
         if(!dataString) return '___';
@@ -664,12 +675,13 @@ Coraçãozinho: ${getVal('coracaozinho')}
 Orelhinha: ${getVal('orelhinha')}
 Olhinho: ${getVal('olhinho')}
 Linguinha: ${getVal('linguinha')}
+Pezinho: ${getVal('pezinho')}
 
 VACINAS BCG e HEP B: ${getVal('vacinas')}
 
 EVOLUÇÃO: ${getVal('evolucao')}
 
-PESO DE HOJE: ${getVal('pesoHoje')}g - Perda de peso: ${getVal('perdaPeso')}
+PESO DE HOJE: ${getVal('pesoHoje')}g - ${getVal('perdaPeso')}
 
 EXAME FÍSICO:
 ${getVal('exameFisico')}
@@ -696,6 +708,43 @@ ${getVal('conduta')}`;
         });
     }
 
+    function imprimirTexto() {
+        const texto = document.getElementById('output').textContent;
+        if(texto.includes('Os dados gerados aparecerão')) {
+            mostrarToast("⚠️ Gere a evolução primeiro!");
+            return;
+        }
+        
+        const janelaImpressao = window.open('', '', 'width=800,height=600');
+        janelaImpressao.document.write(`
+            <html>
+                <head>
+                    <title>Impressão - Evolução Pediátrica</title>
+                    <style>
+                        body { 
+                            font-family: 'Courier New', Courier, monospace; 
+                            padding: 20px; 
+                            line-height: 1.5; 
+                            white-space: pre-wrap; 
+                            font-size: 14px; 
+                            color: #000;
+                            background: #fff;
+                        }
+                    </style>
+                </head>
+                <body>${texto}</body>
+            </html>
+        `);
+        
+        janelaImpressao.document.close();
+        janelaImpressao.focus();
+        
+        setTimeout(() => {
+            janelaImpressao.print();
+            janelaImpressao.close();
+        }, 250);
+    }
+
     // --- 3. SISTEMA DE SALVAMENTO (LOCALSTORAGE) --- //
 
     function salvarRelatorio() {
@@ -711,7 +760,7 @@ ${getVal('conduta')}`;
         };
 
         document.querySelectorAll('input, select, textarea').forEach(el => {
-            if(el.id) relatorio.formData[el.id] = el.value;
+            if(el.id && el.id !== 'arquivoImportacao') relatorio.formData[el.id] = el.value;
         });
 
         let salvos = JSON.parse(localStorage.getItem('plantaoPediatria') || '[]');
@@ -793,6 +842,68 @@ ${getVal('conduta')}`;
         }
     }
 
+    // --- 4. IMPORTAÇÃO E EXPORTAÇÃO (NOVO) --- //
+
+    function exportarDados() {
+        const dados = localStorage.getItem('plantaoPediatria');
+        if (!dados || dados === '[]') {
+            mostrarToast("⚠️ Não há dados para exportar.");
+            return;
+        }
+        
+        const blob = new Blob([dados], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        
+        const hoje = new Date().toISOString().split('T')[0];
+        a.download = `tomped_backup_${hoje}.json`;
+        
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        mostrarToast("✅ Backup exportado!");
+    }
+
+    function acionarImportacao() {
+        document.getElementById('arquivoImportacao').click();
+    }
+
+    function importarDados(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const dadosImportados = JSON.parse(e.target.result);
+                
+                if (Array.isArray(dadosImportados)) {
+                    if (confirm('Deseja SUBSTITUIR a lista atual pelos pacientes importados?\n\nClique em "OK" para substituir.\nClique em "Cancelar" para apenas adicionar aos que já estão aqui.')) {
+                        localStorage.setItem('plantaoPediatria', JSON.stringify(dadosImportados));
+                    } else {
+                        const salvosAtuais = JSON.parse(localStorage.getItem('plantaoPediatria') || '[]');
+                        const novosDados = salvosAtuais.concat(dadosImportados);
+                        localStorage.setItem('plantaoPediatria', JSON.stringify(novosDados));
+                    }
+                    
+                    carregarSalvos();
+                    mostrarToast("✅ Dados importados com sucesso!");
+                } else {
+                    mostrarToast("❌ O formato do arquivo é inválido.");
+                }
+            } catch (err) {
+                mostrarToast("❌ Erro ao ler o arquivo JSON.");
+            }
+            
+            event.target.value = ''; 
+        };
+        reader.readAsText(file);
+    }
+
+    // --- FUNÇÃO AUXILIAR TOAST --- //
     function mostrarToast(mensagem) {
         const toast = document.getElementById("toast");
         toast.textContent = mensagem;
