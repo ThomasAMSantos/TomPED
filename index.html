@@ -660,7 +660,8 @@ PELE: sem lesões exantemáticas</textarea>
             }
         }
 
-        let texto = `LEITO ${getVal('leito')} - ${getVal('nome')}
+        // TEXTO COM AS TAGS <strong> PARA NEGRITO NOS PONTOS SOLICITADOS
+        let texto = `<strong>LEITO</strong> ${getVal('leito')} - <strong>${getVal('nome')}</strong>
 
 RN nascido de ${tipoPartoStr} ${formatarData(getVal('dataNasc'))}, às ${getVal('horaNasc')}H - HV: ${getVal('hv')}
 Apgar: ${getVal('apgar')} Capurro: ${getVal('capurro')}
@@ -670,52 +671,75 @@ RN - TS: ${getVal('rnTS')} / VDRL: ${getVal('rnVDRL')} / Teste rápido: ${getVal
 
 HD: ${getVal('hdIdade')}, ${getVal('hdPeso')}, SEXO ${getVal('hdSexo')}
 
-TESTES DE TRIAGEM NEONATAL:
+<strong>TESTES DE TRIAGEM NEONATAL:</strong>
 Coraçãozinho: ${getVal('coracaozinho')}
 Orelhinha: ${getVal('orelhinha')}
 Olhinho: ${getVal('olhinho')}
 Linguinha: ${getVal('linguinha')}
 Pezinho: ${getVal('pezinho')}
 
-VACINAS BCG e HEP B: ${getVal('vacinas')}
+<strong>VACINAS BCG e HEP B:</strong> ${getVal('vacinas')}
 
-EVOLUÇÃO: ${getVal('evolucao')}
+<strong>EVOLUÇÃO:</strong> ${getVal('evolucao')}
 
 PESO DE HOJE: ${getVal('pesoHoje')}g - ${getVal('perdaPeso')}
 
-EXAME FÍSICO:
+<strong>EXAME FÍSICO:</strong>
 ${getVal('exameFisico')}
 
-CONDUTA:
+<strong>CONDUTA:</strong>
 ${getVal('conduta')}`;
 
         return texto;
     }
 
     function gerarRelatorio() {
-        document.getElementById('output').textContent = gerarTexto();
+        // Agora usamos innerHTML para interpretar a tag <strong> e manter as quebras de linha (white-space: pre-wrap do CSS garante isso)
+        document.getElementById('output').innerHTML = gerarTexto();
         window.scrollTo({ top: document.getElementById('output').offsetTop - 20, behavior: 'smooth' });
     }
 
     function copiarTexto() {
-        const texto = document.getElementById('output').textContent;
-        if(texto.includes('Os dados gerados aparecerão')) {
+        const outputDiv = document.getElementById('output');
+        
+        if(outputDiv.innerText.includes('Os dados gerados aparecerão')) {
             mostrarToast("⚠️ Gere a evolução primeiro!");
             return;
         }
-        navigator.clipboard.writeText(texto).then(() => {
-            mostrarToast("✅ Evolução copiada com sucesso!");
-        });
+
+        // Seleciona o conteúdo do elemento para copiar o formato HTML (Rich Text)
+        const range = document.createRange();
+        range.selectNodeContents(outputDiv);
+        
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        
+        try {
+            document.execCommand('copy');
+            mostrarToast("✅ Evolução copiada com formatação!");
+        } catch (err) {
+            // Fallback para navegadores que bloqueiam execCommand
+            navigator.clipboard.writeText(outputDiv.innerText).then(() => {
+                mostrarToast("✅ Evolução copiada (texto simples)!");
+            });
+        }
+        
+        selection.removeAllRanges(); // Limpa a seleção azul que fica na tela
     }
 
     function imprimirTexto() {
-        const texto = document.getElementById('output').textContent;
-        if(texto.includes('Os dados gerados aparecerão')) {
+        const outputDiv = document.getElementById('output');
+        
+        if(outputDiv.innerText.includes('Os dados gerados aparecerão')) {
             mostrarToast("⚠️ Gere a evolução primeiro!");
             return;
         }
         
+        // Pega o conteúdo em HTML para manter o negrito na impressão
+        const textoHTML = outputDiv.innerHTML;
         const janelaImpressao = window.open('', '', 'width=800,height=600');
+        
         janelaImpressao.document.write(`
             <html>
                 <head>
@@ -725,14 +749,14 @@ ${getVal('conduta')}`;
                             font-family: 'Courier New', Courier, monospace; 
                             padding: 20px; 
                             line-height: 1.5; 
-                            white-space: pre-wrap; 
+                            white-space: pre-wrap; /* Mantém as quebras de linha da evolução */
                             font-size: 14px; 
                             color: #000;
                             background: #fff;
                         }
                     </style>
                 </head>
-                <body>${texto}</body>
+                <body>${textoHTML}</body>
             </html>
         `);
         
@@ -827,7 +851,7 @@ ${getVal('conduta')}`;
         if(confirm('Isso vai apagar os dados da tela atual. Confirmar?')) {
             document.getElementById('reportForm').reset();
             document.getElementById('reportId').value = '';
-            document.getElementById('output').textContent = 'Os dados gerados aparecerão aqui em formato final...';
+            document.getElementById('output').innerHTML = 'Os dados gerados aparecerão aqui em formato final...';
             document.getElementById('hv').value = '';
             document.getElementById('perdaPeso').value = '';
             
