@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script defer src="/_vercel/insights/script.js"></script>
     <title>Tomped | Gerador de Evolução</title>
-    
-    <link rel="icon" type="image/png" href="icon.png">
-    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* Variáveis Globais (Modo Claro) */
@@ -26,7 +23,6 @@
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
             --success: #10b981;
             --danger: #ef4444;
-            --warning-bg: rgba(239, 68, 68, 0.1);
             --radius: 12px;
         }
 
@@ -44,7 +40,6 @@
             --border-focus: #3b82f6;
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3);
-            --warning-bg: rgba(239, 68, 68, 0.15);
         }
 
         body {
@@ -166,12 +161,6 @@
             background-color: var(--bg-panel);
         }
 
-        input[type="checkbox"] {
-            width: auto;
-            margin-right: 6px;
-            cursor: pointer;
-        }
-
         select {
             cursor: pointer;
             appearance: none;
@@ -190,41 +179,6 @@
             color: var(--primary);
             font-weight: 600;
             cursor: not-allowed;
-        }
-
-        /* --- Estilos de Alertas e Detalhes --- */
-        .alerta-box {
-            background-color: var(--warning-bg);
-            border-left: 4px solid var(--primary);
-            padding: 12px 16px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            color: var(--text-main);
-            font-weight: 500;
-            font-size: 0.9rem;
-            display: none;
-            line-height: 1.4;
-        }
-
-        .checkbox-group { 
-            display: flex; 
-            gap: 12px; 
-            flex-wrap: wrap; 
-            margin-top: 8px; 
-            padding: 8px;
-            background-color: var(--bg-body);
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-        }
-        
-        .checkbox-group label { 
-            display: flex; 
-            align-items: center; 
-            font-weight: normal; 
-            color: var(--text-main); 
-            font-size: 0.85rem;
-            margin-bottom: 0;
-            cursor: pointer;
         }
 
         /* --- Botões --- */
@@ -311,13 +265,13 @@
         }
         #toast.show { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        /* --- Modal Doação --- */
+        /* --- Modal Doação (Profissional) --- */
         .modal-overlay {
             display: flex;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(3px);
+            backdrop-filter: blur(3px); /* Efeito moderno de desfoque no fundo */
             z-index: 2000;
             justify-content: center;
             align-items: center;
@@ -325,7 +279,10 @@
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
         }
-        .modal-overlay.show { opacity: 1; visibility: visible; }
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
         .modal-content {
             background-color: var(--bg-panel);
             padding: 32px;
@@ -339,52 +296,149 @@
             transform: translateY(-20px);
             transition: transform 0.3s ease;
         }
-        .modal-overlay.show .modal-content { transform: translateY(0); }
-        .modal-close {
-            position: absolute; top: 16px; right: 16px; background: var(--bg-input);
-            border: 1px solid var(--border-color); border-radius: 50%; width: 32px; height: 32px;
-            font-size: 1.2rem; color: var(--text-muted); cursor: pointer;
-            display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
         }
-        .modal-close:hover { color: var(--danger); border-color: var(--danger); background: transparent; }
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 32px; height: 32px;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+        }
+        .modal-close:hover {
+            color: var(--danger);
+            border-color: var(--danger);
+            background: transparent;
+        }
         .modal-icon {
-            width: 56px; height: 56px; background: rgba(37, 99, 235, 0.1); color: var(--primary);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            width: 56px;
+            height: 56px;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin: 0 auto 16px auto;
         }
-        .modal-content h3 { margin-top: 0; font-size: 1.4rem; color: var(--text-main); }
-        .modal-content p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px; }
+        .modal-content h3 {
+            margin-top: 0;
+            font-size: 1.4rem;
+            color: var(--text-main);
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .modal-content p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
         .pix-card {
-            background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 20px; margin-bottom: 20px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
         }
-        .pix-img { max-width: 160px; width: 100%; border-radius: 8px; margin: 0 auto 16px auto; border: 1px solid var(--border-color); display: block; }
-        .pix-key-title { margin: 0 0 8px 0 !important; font-weight: 600; font-size: 0.85rem; text-align: left; color: var(--text-main) !important; }
+        .pix-img {
+            max-width: 160px;
+            width: 100%;
+            border-radius: 8px;
+            margin: 0 auto 16px auto;
+            border: 1px solid var(--border-color);
+            display: block;
+        }
+        .pix-key-title {
+            margin: 0 0 8px 0 !important;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: left;
+            color: var(--text-main) !important;
+        }
         .pix-key-container {
-            display: flex; align-items: center; justify-content: space-between;
-            background: var(--bg-panel); padding: 8px 12px; border-radius: 6px;
-            border: 1px solid var(--border-color); gap: 10px; text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-panel);
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            gap: 10px;
+            text-align: left;
         }
-        .pix-key-container span { font-family: 'Courier New', Courier, monospace; font-size: 0.8rem; word-break: break-all; color: var(--text-main); }
-        .btn-text-muted { background: none; border: none; color: var(--text-muted); font-size: 0.85rem; cursor: pointer; text-decoration: underline; padding: 8px; }
-        .btn-text-muted:hover { color: var(--text-main); }
+        .pix-key-container span {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.8rem;
+            word-break: break-all;
+            color: var(--text-main);
+        }
+        .btn-text-muted {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 8px;
+        }
+        .btn-text-muted:hover {
+            color: var(--text-main);
+        }
 
         /* --- Footer & Creditos --- */
         .footer {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; margin-top: 20px; padding: 24px 10px; border-top: 1px solid var(--border-color);
-            color: var(--text-muted); font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 20px;
+            padding: 24px 10px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.85rem;
         }
         .footer p { margin: 6px 0; }
-        .footer a { color: var(--primary); text-decoration: none; font-weight: 600; transition: color 0.2s; }
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
         .footer a:hover { text-decoration: underline; }
         .support-link {
-            display: inline-flex; align-items: center; gap: 6px; background: var(--bg-input);
-            padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border-color);
-            color: var(--text-main) !important; font-size: 0.8rem; margin-top: 10px; cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-input);
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            color: var(--text-main) !important;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            cursor: pointer;
         }
-        .support-link:hover { border-color: var(--primary); }
-        .disclaimer { font-size: 0.75rem; margin-top: 14px; opacity: 0.8; font-style: italic; max-width: 800px; }
+        .support-link:hover {
+            border-color: var(--primary);
+        }
+        .disclaimer {
+            font-size: 0.75rem;
+            margin-top: 14px;
+            opacity: 0.8;
+            font-style: italic;
+            max-width: 800px;
+        }
+
         .mt-3 { margin-top: 16px; }
     </style>
 </head>
@@ -409,6 +463,8 @@
                 <button class="btn-primary" onclick="copiarChavePix()" style="padding: 6px 12px; font-size: 0.8rem; border-radius: 4px;">Copiar</button>
             </div>
         </div>
+
+        <button class="btn-text-muted" onclick="fecharModalParaSempre()">Não exibir esta mensagem novamente</button>
     </div>
 </div>
 
@@ -464,90 +520,47 @@
             <div class="grid-4 mt-3">
                 <div><label>Apgar</label><input type="text" id="apgar" placeholder="Ex: 8/10"></div>
                 <div><label>Capurro</label><input type="text" id="capurro" placeholder="Ex: 40s +3d"></div>
-                <div><label>Estatura (cm)</label><input type="number" id="estatura" placeholder="49" oninput="verificarAlertas()"></div>
-                <div><label>Peso Nascer (g)</label><input type="number" id="pn" oninput="calcularPerda(); verificarAlertas()" placeholder="3760"></div>
+                <div><label>Estatura (cm)</label><input type="number" id="estatura" placeholder="49"></div>
+                <div><label>Peso Nascer (g)</label><input type="number" id="pn" oninput="calcularPerda()" placeholder="3760"></div>
             </div>
 
             <div class="grid-2 mt-3">
-                <div><label>PC (Perímetro Cefálico - cm)</label><input type="number" id="pc" placeholder="36" oninput="verificarAlertas()"></div>
-                <div><label>PT (Perímetro Torácico - cm)</label><input type="number" id="pt" placeholder="35" oninput="verificarAlertas()"></div>
+                <div><label>PC (Perímetro Cefálico - cm)</label><input type="number" id="pc" placeholder="36"></div>
+                <div><label>PT (Perímetro Torácico - cm)</label><input type="number" id="pt" placeholder="35"></div>
             </div>
 
             <div class="grid-2 mt-3">
-                <div><label>Peso de Hoje (g)</label><input type="number" id="pesoHoje" oninput="calcularPerda(); verificarAlertas()" placeholder="3660"></div>
+                <div><label>Peso de Hoje (g)</label><input type="number" id="pesoHoje" oninput="calcularPerda()" placeholder="3660"></div>
                 <div><label>% Variação de Peso</label><input type="text" id="perdaPeso" class="readonly-calc" readonly placeholder="Calculado auto"></div>
             </div>
 
             <h3>Sorologias e Tipagem</h3>
-            
-            <div class="grid-2 mt-3">
+            <div class="grid-3 mt-3">
                 <div>
                     <label>Tipo Sanguíneo Mãe</label>
-                    <select id="maeTS" onchange="verificarAlertas()">
-                        <option>O+</option><option>O-</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>Desconhecido</option>
-                    </select>
+                    <select id="maeTS"><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option><option>Desconhecido</option></select>
                 </div>
                 <div>
-                    <label>Tipo Sanguíneo RN</label>
-                    <select id="rnTS" onchange="verificarAlertas()">
-                        <option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option><option selected>Em andamento</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="grid-2 mt-3">
-                <div style="background: var(--bg-input); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
                     <label>Mãe VDRL</label>
-                    <select id="maeVDRL" onchange="verificarVDRL('mae'); verificarAlertas()">
-                        <option value="NR">NR</option>
-                        <option value="Reagente">Reagente</option>
-                        <option value="Não Realizado">Não Realizado</option>
-                    </select>
-                    <div id="divMaeVDRLDetalhes" style="display: none; margin-top: 12px; grid-template-columns: 1fr 1fr; gap: 10px;">
-                        <div><label style="font-size: 0.75rem;">Titulação</label><input type="text" id="maeVDRLTitulacao" placeholder="Ex: 1:8"></div>
-                        <div><label style="font-size: 0.75rem;">Data Exame</label><input type="date" id="maeVDRLData"></div>
-                    </div>
+                    <select id="maeVDRL"><option>NR</option><option>Reagente</option><option>Não Realizado</option></select>
                 </div>
-                <div style="background: var(--bg-input); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div>
                     <label>Mãe Teste Rápido</label>
-                    <select id="maeTR_status" onchange="verificarTR('mae'); verificarAlertas()">
-                        <option value="NR">Todos NR</option>
-                        <option value="Reagente">Reagente</option>
-                        <option value="Não Realizado">Não Realizado</option>
-                    </select>
-                    <div id="divMaeTR_reagentes" class="checkbox-group" style="display: none;">
-                        <label><input type="checkbox" id="maeTR_hiv" onchange="verificarAlertas()"> HIV</label>
-                        <label><input type="checkbox" id="maeTR_hepb" onchange="verificarAlertas()"> Hep B</label>
-                        <label><input type="checkbox" id="maeTR_sifilis" onchange="verificarAlertas()"> Sífilis</label>
-                        <label><input type="checkbox" id="maeTR_hepc" onchange="verificarAlertas()"> Hep C</label>
-                    </div>
+                    <select id="maeTR"><option>NR</option><option>Reagente</option><option>Não Realizado</option></select>
                 </div>
             </div>
-
-            <div class="grid-2 mt-3">
-                <div style="background: var(--bg-input); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
-                    <label>RN VDRL</label>
-                    <select id="rnVDRL" onchange="verificarVDRL('rn'); verificarAlertas()">
-                        <option value="NR">NR</option>
-                        <option value="Reagente">Reagente</option>
-                        <option value="Não Realizado">Não Realizado</option>
-                    </select>
-                    <div id="divRnVDRLDetalhes" style="display: none; margin-top: 12px; grid-template-columns: 1fr 1fr; gap: 10px;">
-                        <div><label style="font-size: 0.75rem;">Titulação</label><input type="text" id="rnVDRLTitulacao" placeholder="Ex: 1:8"></div>
-                        <div><label style="font-size: 0.75rem;">Data Exame</label><input type="date" id="rnVDRLData"></div>
-                    </div>
+            <div class="grid-3 mt-3">
+                <div>
+                    <label>Tipo Sanguíneo RN</label>
+                    <select id="rnTS"><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option><option>Em andamento</option></select>
                 </div>
-                <div style="background: var(--bg-input); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div>
+                    <label>RN VDRL</label>
+                    <select id="rnVDRL"><option>NR</option><option>Reagente</option><option>Não Realizado</option></select>
+                </div>
+                <div>
                     <label>RN Teste Rápido</label>
-                    <select id="rnTR_status" onchange="verificarTR('rn'); verificarAlertas()">
-                        <option value="NR">Todos NR</option>
-                        <option value="Reagente">Reagente</option>
-                        <option value="Não Realizado">Não Realizado</option>
-                    </select>
-                    <div id="divRnTR_reagentes" class="checkbox-group" style="display: none;">
-                        <label><input type="checkbox" id="rnTR_hiv" onchange="verificarAlertas()"> HIV</label>
-                        <label><input type="checkbox" id="rnTR_sifilis" onchange="verificarAlertas()"> Sífilis</label>
-                    </div>
+                    <select id="rnTR"><option>NR</option><option>Reagente</option><option>Não Realizado</option></select>
                 </div>
             </div>
 
@@ -596,9 +609,6 @@
                     </select>
                 </div>
             </div>
-
-            <div id="alertasIniciais" class="alerta-box mt-3">
-                </div>
 
             <label class="mt-3">Evolução</label>
             <textarea id="evolucao">RN eupneico em AA, RN com boa pega e sucção, em aleitamento materno exclusivo, mãe com boa produção láctea. Diurese e evacuação presentes fisiologicamente.</textarea>
@@ -688,22 +698,35 @@ PELE: sem lesões exantemáticas</textarea>
 
 <script>
     // --- FUNÇÕES DO MODAL DOAÇÃO --- //
-    function fecharModal() { document.getElementById('doacaoModal').classList.remove('show'); }
-    
-    function abrirModalManual() { document.getElementById('doacaoModal').classList.add('show'); }
-    
+    function fecharModal() {
+        document.getElementById('doacaoModal').classList.remove('show');
+    }
+
+    function fecharModalParaSempre() {
+        localStorage.setItem('tomped_hide_donation', 'true');
+        fecharModal();
+        mostrarToast("👍 Preferência salva. Você pode apoiar depois no rodapé.");
+    }
+
+    function abrirModalManual() {
+        document.getElementById('doacaoModal').classList.add('show');
+    }
+
     function copiarChavePix() {
         const chave = document.getElementById('chavePix').innerText;
         navigator.clipboard.writeText(chave).then(() => {
             mostrarToast("✅ Chave Pix copiada!");
-            setTimeout(fecharModal, 2000); 
-        }).catch(() => { mostrarToast("❌ Erro ao copiar chave."); });
+            setTimeout(fecharModal, 2000); // Fecha o modal sozinho após a pessoa copiar
+        }).catch(() => {
+            mostrarToast("❌ Erro ao copiar chave.");
+        });
     }
 
     // --- 0. GESTÃO DO TEMA (DARK/LIGHT MODE) --- //
     function initTheme() {
         const savedTheme = localStorage.getItem('tomped_theme');
         const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
         if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
             document.documentElement.setAttribute('data-theme', 'dark');
             atualizarBotaoTema('dark');
@@ -716,6 +739,7 @@ PELE: sem lesões exantemáticas</textarea>
     function toggleTheme() {
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('tomped_theme', newTheme);
         atualizarBotaoTema(newTheme);
@@ -724,100 +748,26 @@ PELE: sem lesões exantemáticas</textarea>
     function atualizarBotaoTema(theme) {
         const icon = document.getElementById('themeIcon');
         const text = document.getElementById('themeText');
-        if (theme === 'dark') { icon.textContent = '☀️'; text.textContent = 'Modo Claro'; } 
-        else { icon.textContent = '🌙'; text.textContent = 'Modo Escuro'; }
+        if (theme === 'dark') {
+            icon.textContent = '☀️';
+            text.textContent = 'Modo Claro';
+        } else {
+            icon.textContent = '🌙';
+            text.textContent = 'Modo Escuro';
+        }
     }
 
-    // --- 1. FUNÇÕES DE CÁLCULO, FORMULÁRIO E AVISOS CLÍNICOS --- //
+    // --- 1. FUNÇÕES DE CÁLCULO E FORMULÁRIO --- //
 
     function verificarTipoParto() {
         const tipo = document.getElementById('tipoParto').value;
         const container = document.getElementById('containerMotivoPC');
-        if (tipo === 'PC') { container.style.display = 'block'; } 
-        else { container.style.display = 'none'; document.getElementById('motivoPC').value = ''; }
-    }
-
-    function verificarVDRL(tipo) {
-        const select = document.getElementById(tipo + 'VDRL').value;
-        const divDetalhes = document.getElementById('div' + tipo.charAt(0).toUpperCase() + tipo.slice(1) + 'VDRLDetalhes');
-        if (select === 'Reagente') { divDetalhes.style.display = 'grid'; } 
-        else { divDetalhes.style.display = 'none'; }
-    }
-
-    function verificarTR(tipo) {
-        const select = document.getElementById(tipo + 'TR_status').value;
-        const divCheckboxes = document.getElementById('div' + tipo.charAt(0).toUpperCase() + tipo.slice(1) + 'TR_reagentes');
-        if (select === 'Reagente') { divCheckboxes.style.display = 'flex'; } 
-        else { divCheckboxes.style.display = 'none'; }
-    }
-
-    function verificarAlertas() {
-        let alertasEncontrados = [];
-
-        // Incompatibilidade Sanguínea
-        const maeTS = document.getElementById('maeTS').value;
-        const rnTS = document.getElementById('rnTS').value;
-        if (maeTS.includes('O') && (rnTS.includes('A') || rnTS.includes('B'))) {
-            alertasEncontrados.push("Incompatibilidade ABO");
-        }
-        if (maeTS.includes('-') && rnTS.includes('+')) {
-            alertasEncontrados.push("Incompatibilidade Rh");
-        }
-
-        // Antropometria
-        const pn = parseFloat(document.getElementById('pn').value);
-        const pesoHoje = parseFloat(document.getElementById('pesoHoje').value);
-        const estatura = parseFloat(document.getElementById('estatura').value);
-        const pc = parseFloat(document.getElementById('pc').value);
-        const pt = parseFloat(document.getElementById('pt').value);
-
-        if (pn) {
-            if (pn < 2500) alertasEncontrados.push("Baixo Peso");
-            if (pn >= 4000) alertasEncontrados.push("Macrossomia");
-        }
-        
-        if (pn && pesoHoje) {
-            const perda = ((pn - pesoHoje) / pn) * 100;
-            if (perda > 10) alertasEncontrados.push("Perda Ponderal > 10%");
-        }
-        
-        if (estatura) {
-            if (estatura < 45) alertasEncontrados.push("Estatura Baixa");
-            if (estatura > 55) alertasEncontrados.push("Estatura Alta");
-        }
-
-        if (pc) {
-            if (pc < 33) alertasEncontrados.push("PC Baixo");
-            if (pc > 37) alertasEncontrados.push("PC Alto");
-        }
-        
-        if (pt) {
-            if (pt < 30) alertasEncontrados.push("PT Baixo");
-            if (pt > 36) alertasEncontrados.push("PT Alto");
-        }
-
-        // Diagnósticos e Sorologias do RN
-        const rnVDRL = document.getElementById('rnVDRL').value;
-        const rnTR_status = document.getElementById('rnTR_status').value;
-        const rnTR_sifilis = document.getElementById('rnTR_sifilis') ? document.getElementById('rnTR_sifilis').checked : false;
-        const rnTR_hiv = document.getElementById('rnTR_hiv') ? document.getElementById('rnTR_hiv').checked : false;
-
-        if (rnVDRL === 'Reagente' || (rnTR_status === 'Reagente' && rnTR_sifilis)) {
-            alertasEncontrados.push("Sífilis congênita");
-        }
-        if (rnTR_status === 'Reagente' && rnTR_hiv) {
-            alertasEncontrados.push("Exposição perinatal ao HIV");
-        }
-
-        const box = document.getElementById('alertasIniciais');
-        if (alertasEncontrados.length > 0) {
-            box.innerHTML = "📝 <strong>Diagnósticos adicionais mapeados para o HD:</strong> " + alertasEncontrados.join(", ");
-            box.style.display = 'block';
+        if (tipo === 'PC') {
+            container.style.display = 'block';
         } else {
-            box.style.display = 'none';
+            container.style.display = 'none';
+            document.getElementById('motivoPC').value = ''; 
         }
-
-        return alertasEncontrados;
     }
 
     function mudarModeloExame() {
@@ -893,59 +843,27 @@ PELE: sem lesões exantemáticas</textarea>
     function gerarTexto() {
         calcularPerda();
         calcularHV();
+
         const getVal = (id) => document.getElementById(id).value || '___';
         
         let tipoPartoStr = getVal('tipoParto');
         if (tipoPartoStr === 'PC') {
             const motivo = document.getElementById('motivoPC').value;
-            if (motivo) tipoPartoStr += ` (Motivo: ${motivo})`;
+            if (motivo) {
+                tipoPartoStr += ` (Motivo: ${motivo})`;
+            }
         }
 
-        // VDRL Strings
-        let maeVDRLStr = getVal('maeVDRL');
-        if (maeVDRLStr === 'Reagente') {
-            maeVDRLStr += ` (Titulação: ${getVal('maeVDRLTitulacao')}, Data: ${formatarData(getVal('maeVDRLData'))})`;
-        }
-        let rnVDRLStr = getVal('rnVDRL');
-        if (rnVDRLStr === 'Reagente') {
-            rnVDRLStr += ` (Titulação: ${getVal('rnVDRLTitulacao')}, Data: ${formatarData(getVal('rnVDRLData'))})`;
-        }
-
-        // Testes Rápidos Strings
-        let maeTRStr = getVal('maeTR_status');
-        if (maeTRStr === 'Reagente') {
-            let reagentesM = [];
-            if(document.getElementById('maeTR_hiv').checked) reagentesM.push("HIV");
-            if(document.getElementById('maeTR_hepb').checked) reagentesM.push("Hep B");
-            if(document.getElementById('maeTR_sifilis').checked) reagentesM.push("Sífilis");
-            if(document.getElementById('maeTR_hepc').checked) reagentesM.push("Hep C");
-            maeTRStr = reagentesM.length > 0 ? `Reagente (${reagentesM.join(', ')})` : 'Reagente';
-        }
-
-        let rnTRStr = getVal('rnTR_status');
-        if (rnTRStr === 'Reagente') {
-            let reagentesRN = [];
-            if(document.getElementById('rnTR_hiv').checked) reagentesRN.push("HIV");
-            if(document.getElementById('rnTR_sifilis').checked) reagentesRN.push("Sífilis");
-            rnTRStr = reagentesRN.length > 0 ? `Reagente (${reagentesRN.join(', ')})` : 'Reagente';
-        }
-
-        // Montagem Dinâmica e Acoplada do HD
-        const avisosArray = verificarAlertas();
-        let hdTextoFinal = `<strong>HD:</strong> ${getVal('hdIdade')}, ${getVal('hdPeso')}, SEXO ${getVal('hdSexo')}`;
-        if (avisosArray.length > 0) {
-            hdTextoFinal += `, ${avisosArray.join(', ')}`;
-        }
-
+        // TEXTO COM AS TAGS <strong> PARA NEGRITO NOS PONTOS SOLICITADOS
         let texto = `<strong>LEITO</strong> ${getVal('leito')} - <strong>${getVal('nome')}</strong>
 
 RN nascido de ${tipoPartoStr} ${formatarData(getVal('dataNasc'))}, às ${getVal('horaNasc')}H - HV: ${getVal('hv')}
 Apgar: ${getVal('apgar')} Capurro: ${getVal('capurro')}
 PN: ${getVal('pn')}g E: ${getVal('estatura')}cm PC: ${getVal('pc')}cm PT: ${getVal('pt')}cm
-Mãe - TS: ${getVal('maeTS')} / VDRL: ${maeVDRLStr} / Teste rápido: ${maeTRStr}
-RN - TS: ${getVal('rnTS')} / VDRL: ${rnVDRLStr} / Teste rápido: ${rnTRStr}
+Mãe - TS: ${getVal('maeTS')} / VDRL: ${getVal('maeVDRL')} / Teste rápido: ${getVal('maeTR')}
+RN - TS: ${getVal('rnTS')} / VDRL: ${getVal('rnVDRL')} / Teste rápido: ${getVal('rnTR')}
 
-${hdTextoFinal}
+HD: ${getVal('hdIdade')}, ${getVal('hdPeso')}, SEXO ${getVal('hdSexo')}
 
 <strong>TESTES DE TRIAGEM NEONATAL:</strong>
 Coraçãozinho: ${getVal('coracaozinho')}
@@ -976,12 +894,15 @@ ${getVal('conduta')}`;
 
     function copiarTexto() {
         const outputDiv = document.getElementById('output');
+        
         if(outputDiv.innerText.includes('Os dados gerados aparecerão')) {
-            mostrarToast("⚠️ Gere a evolução primeiro!"); return;
+            mostrarToast("⚠️ Gere a evolução primeiro!");
+            return;
         }
 
         const range = document.createRange();
         range.selectNodeContents(outputDiv);
+        
         const selection = window.getSelection();
         selection.removeAllRanges();
         selection.addRange(range);
@@ -994,24 +915,36 @@ ${getVal('conduta')}`;
                 mostrarToast("✅ Evolução copiada (texto simples)!");
             });
         }
+        
         selection.removeAllRanges();
     }
 
     function imprimirTexto() {
         const outputDiv = document.getElementById('output');
+        
         if(outputDiv.innerText.includes('Os dados gerados aparecerão')) {
-            mostrarToast("⚠️ Gere a evolução primeiro!"); return;
+            mostrarToast("⚠️ Gere a evolução primeiro!");
+            return;
         }
         
         const textoHTML = outputDiv.innerHTML;
         const janelaImpressao = window.open('', '', 'width=800,height=600');
         
+        // Quebra na tag JS para não dar conflito com o Live Server
         janelaImpressao.document.write(`
             <html>
                 <head>
                     <title>Impressão - Evolução Pediátrica</title>
                     <style>
-                        body { font-family: 'Courier New', Courier, monospace; padding: 20px; line-height: 1.5; white-space: pre-wrap; font-size: 14px; color: #000; background: #fff; }
+                        body { 
+                            font-family: 'Courier New', Courier, monospace; 
+                            padding: 20px; 
+                            line-height: 1.5; 
+                            white-space: pre-wrap;
+                            font-size: 14px; 
+                            color: #000;
+                            background: #fff;
+                        }
                     </style>
                 </head>
                 <body>${textoHTML}<` + `/body>
@@ -1042,13 +975,7 @@ ${getVal('conduta')}`;
         };
 
         document.querySelectorAll('input, select, textarea').forEach(el => {
-            if(el.id && el.id !== 'arquivoImportacao') {
-                if (el.type === 'checkbox') {
-                    relatorio.formData[el.id] = el.checked;
-                } else {
-                    relatorio.formData[el.id] = el.value;
-                }
-            }
+            if(el.id && el.id !== 'arquivoImportacao') relatorio.formData[el.id] = el.value;
         });
 
         let salvos = JSON.parse(localStorage.getItem('plantaoPediatria') || '[]');
@@ -1066,6 +993,7 @@ ${getVal('conduta')}`;
     function carregarSalvos() {
         const salvos = JSON.parse(localStorage.getItem('plantaoPediatria') || '[]');
         const container = document.getElementById('savedList');
+        
         if(salvos.length === 0) {
             container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">Nenhum paciente salvo no plantão atual.</p>';
             return;
@@ -1091,21 +1019,9 @@ ${getVal('conduta')}`;
         if(relatorio) {
             for (let key in relatorio.formData) {
                 const el = document.getElementById(key);
-                if(el) {
-                    if (el.type === 'checkbox') {
-                        el.checked = relatorio.formData[key];
-                    } else {
-                        el.value = relatorio.formData[key];
-                    }
-                }
+                if(el) el.value = relatorio.formData[key];
             }
             verificarTipoParto();
-            verificarVDRL('mae');
-            verificarVDRL('rn');
-            verificarTR('mae');
-            verificarTR('rn');
-            verificarAlertas();
-
             gerarRelatorio();
             window.scrollTo({ top: 0, behavior: 'smooth' });
             mostrarToast("✏️ Paciente carregado para edição.");
@@ -1137,12 +1053,6 @@ ${getVal('conduta')}`;
             document.getElementById('conduta').value = "1- Aguardo tempo hábil";
             
             verificarTipoParto();
-            verificarVDRL('mae');
-            verificarVDRL('rn');
-            verificarTR('mae');
-            verificarTR('rn');
-            verificarAlertas();
-
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }
@@ -1152,7 +1062,8 @@ ${getVal('conduta')}`;
     function exportarDados() {
         const dados = localStorage.getItem('plantaoPediatria');
         if (!dados || dados === '[]') {
-            mostrarToast("⚠️ Não há dados para exportar."); return;
+            mostrarToast("⚠️ Não há dados para exportar.");
+            return;
         }
         
         const blob = new Blob([dados], { type: "application/json" });
@@ -1171,7 +1082,9 @@ ${getVal('conduta')}`;
         mostrarToast("✅ Backup exportado!");
     }
 
-    function acionarImportacao() { document.getElementById('arquivoImportacao').click(); }
+    function acionarImportacao() {
+        document.getElementById('arquivoImportacao').click();
+    }
 
     function importarDados(event) {
         const file = event.target.files[0];
@@ -1181,6 +1094,7 @@ ${getVal('conduta')}`;
         reader.onload = function(e) {
             try {
                 const dadosImportados = JSON.parse(e.target.result);
+                
                 if (Array.isArray(dadosImportados)) {
                     if (confirm('Deseja SUBSTITUIR a lista atual pelos pacientes importados?\n\nClique em "OK" para substituir.\nClique em "Cancelar" para apenas adicionar aos que já estão aqui.')) {
                         localStorage.setItem('plantaoPediatria', JSON.stringify(dadosImportados));
@@ -1189,12 +1103,16 @@ ${getVal('conduta')}`;
                         const novosDados = salvosAtuais.concat(dadosImportados);
                         localStorage.setItem('plantaoPediatria', JSON.stringify(novosDados));
                     }
+                    
                     carregarSalvos();
                     mostrarToast("✅ Dados importados com sucesso!");
                 } else {
                     mostrarToast("❌ O formato do arquivo é inválido.");
                 }
-            } catch (err) { mostrarToast("❌ Erro ao ler o arquivo JSON."); }
+            } catch (err) {
+                mostrarToast("❌ Erro ao ler o arquivo JSON.");
+            }
+            
             event.target.value = ''; 
         };
         reader.readAsText(file);
@@ -1204,9 +1122,11 @@ ${getVal('conduta')}`;
     function mostrarToast(mensagem) {
         const toast = document.getElementById("toast");
         toast.textContent = mensagem;
+        
         toast.classList.remove("show");
         void toast.offsetWidth;
         toast.classList.add("show");
+        
         setTimeout(function(){ toast.classList.remove("show"); }, 3000);
     }
 
@@ -1220,8 +1140,13 @@ ${getVal('conduta')}`;
         
         verificarTipoParto();
 
-        // Alteração: O modal agora aparece sempre após 1.5s, sem checar o localStorage
-        setTimeout(() => { document.getElementById('doacaoModal').classList.add('show'); }, 1500);
+        // Verifica se o usuário já pediu para não mostrar o modal de doação
+        const hideDonation = localStorage.getItem('tomped_hide_donation');
+        if (!hideDonation) {
+            setTimeout(() => {
+                document.getElementById('doacaoModal').classList.add('show');
+            }, 1500); // 1.5s de atraso para a página carregar suavemente primeiro
+        }
     };
 </script>
 
