@@ -27,7 +27,6 @@
             --success: #10b981;
             --danger: #ef4444;
             --warning-bg: rgba(239, 68, 68, 0.1);
-            --info-bg: rgba(37, 99, 235, 0.08);
             --radius: 12px;
         }
 
@@ -46,7 +45,6 @@
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3);
             --warning-bg: rgba(239, 68, 68, 0.15);
-            --info-bg: rgba(37, 99, 235, 0.15);
         }
 
         body {
@@ -551,76 +549,6 @@
                     </div>
                 </div>
             </div>
-
-            <div id="moduloSifilisMS" style="display: none; background: var(--info-bg); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); margin-top: 24px;">
-                <h3 style="margin-top: 0; border: none; color: var(--primary);">Manejo de Sífilis (Fluxograma MS)</h3>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; align-items: flex-end;">
-                    <div>
-                        <label>Mãe tratada adequadamente na gestação?</label>
-                        <select id="sifTratMae" onchange="calcSifilis()">
-                            <option value="NA">Não se aplica / Sem diagnóstico</option>
-                            <option value="SIM">Sim, adequadamente tratada</option>
-                            <option value="NAO">Não (ou tratamento inadequado)</option>
-                        </select>
-                    </div>
-                    
-                    <div id="divSifVdrlMaior" style="display:none;">
-                        <label>VDRL do RN é ≥ 2 diluições MAIOR que materno?</label>
-                        <select id="sifVdrlMaior" onchange="calcSifilis()">
-                            <option value="">Selecione...</option>
-                            <option value="SIM">Sim</option>
-                            <option value="NAO">Não</option>
-                        </select>
-                    </div>
-
-                    <div id="divSifExFisico" style="display:none;">
-                        <label>O exame físico da criança é normal?</label>
-                        <select id="sifExFisico" onchange="calcSifilis()">
-                            <option value="">Selecione...</option>
-                            <option value="SIM">Sim</option>
-                            <option value="NAO">Não</option>
-                        </select>
-                    </div>
-
-                    <div id="divSifVdrlNR" style="display:none;">
-                        <label>O VDRL do RN é NÃO reagente?</label>
-                        <select id="sifVdrlNR" onchange="calcSifilis()">
-                            <option value="">Selecione...</option>
-                            <option value="SIM">Sim (Não reagente)</option>
-                            <option value="NAO">Não (Reagente)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div id="divSifExames" style="display:none; margin-top:16px; padding: 12px; background: var(--bg-input); border-radius: 8px; border: 1px dashed var(--border-color);">
-                    <h4 style="margin-top:0; margin-bottom: 8px; color: var(--danger);">Sífilis Congênita: Avaliação de Exames</h4>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Solicite e avalie: Hemograma completo, Glicemia, RX de ossos longos, Líquor (VDRL, celularidade e proteína).</p>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; align-items: flex-end;">
-                        <div>
-                            <label>Ex. Físico, Hemograma, Líquor e RX normais E VDRL RN NR?</label>
-                            <select id="sifTodosNormais" onchange="calcSifilis()">
-                                <option value="AGUARDANDO">Aguardando resultados</option>
-                                <option value="SIM">Sim, todos normais e VDRL NR</option>
-                                <option value="NAO">Não (há alteração ou VDRL Reagente)</option>
-                            </select>
-                        </div>
-                        
-                        <div id="divSifLiquorNormal" style="display:none;">
-                            <label>O resultado do Líquor é normal?</label>
-                            <select id="sifLiquorNormal" onchange="calcSifilis()">
-                                <option value="AGUARDANDO">Aguardando resultado</option>
-                                <option value="SIM">Sim</option>
-                                <option value="NAO">Não</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="resSifilis" class="alerta-box" style="margin-top: 16px; display:none; background: var(--bg-panel); border-left-color: var(--primary);"></div>
-            </div>
-
             <h3>Triagem e Vacinas</h3>
             <div class="grid-3 mt-3">
                 <div><label>Coraçãozinho</label><select id="coracaozinho"><option>Não Realizado</option><option>Realizado, sem alterações</option><option>Alterado</option></select></div>
@@ -668,7 +596,7 @@
             </div>
 
             <div id="alertasIniciais" class="alerta-box mt-3">
-            </div>
+                </div>
 
             <label class="mt-3">Evolução</label>
             <textarea id="evolucao">RN eupneico em AA, RN com boa pega e sucção, em aleitamento materno exclusivo, mãe com boa produção láctea. Diurese e evacuação presentes fisiologicamente.</textarea>
@@ -757,8 +685,6 @@ PELE: sem lesões exantemáticas</textarea>
 <div id="toast">Mensagem</div>
 
 <script>
-    window.sifilisOutput = {}; 
-
     // --- FUNÇÕES DO MODAL DOAÇÃO --- //
     function fecharModal() { document.getElementById('doacaoModal').classList.remove('show'); }
     
@@ -800,131 +726,7 @@ PELE: sem lesões exantemáticas</textarea>
         else { icon.textContent = '🌙'; text.textContent = 'Modo Escuro'; }
     }
 
-    // --- 1. FUNÇÕES DE CÁLCULO E ALGORITMO SÍFILIS --- //
-
-    function checarVisibilidadeSifilis() {
-        const maeVDRL = document.getElementById('maeVDRL').value;
-        const rnVDRL = document.getElementById('rnVDRL').value;
-        const maeTR = document.getElementById('maeTR_status').value;
-        const maeTR_sifilis = document.getElementById('maeTR_sifilis').checked;
-        const rnTR = document.getElementById('rnTR_status').value;
-        const rnTR_sifilis = document.getElementById('rnTR_sifilis') ? document.getElementById('rnTR_sifilis').checked : false;
-
-        const hasSifilis = (maeVDRL === 'Reagente') ||
-                           (rnVDRL === 'Reagente') ||
-                           (maeTR === 'Reagente' && maeTR_sifilis) ||
-                           (rnTR === 'Reagente' && rnTR_sifilis);
-
-        const modulo = document.getElementById('moduloSifilisMS');
-        if (hasSifilis) {
-            modulo.style.display = 'block';
-        } else {
-            modulo.style.display = 'none';
-            document.getElementById('sifTratMae').value = 'NA';
-            calcSifilis(); 
-        }
-    }
-
-    function calcSifilis() {
-        const tratMae = document.getElementById('sifTratMae').value;
-        const vdrlMaior = document.getElementById('sifVdrlMaior').value;
-        const exFisico = document.getElementById('sifExFisico').value;
-        const vdrlNR = document.getElementById('sifVdrlNR').value;
-
-        const exTodosNormais = document.getElementById('sifTodosNormais').value;
-        const liquorNormal = document.getElementById('sifLiquorNormal').value;
-
-        document.getElementById('divSifVdrlMaior').style.display = 'none';
-        document.getElementById('divSifExFisico').style.display = 'none';
-        document.getElementById('divSifVdrlNR').style.display = 'none';
-        document.getElementById('divSifExames').style.display = 'none';
-        document.getElementById('divSifLiquorNormal').style.display = 'none';
-
-        let isCongenita = false;
-        let hd = "";
-        let condutaArr = [];
-        let examesReq = "";
-
-        if (tratMae === 'SIM') {
-            document.getElementById('divSifVdrlMaior').style.display = 'block';
-            if (vdrlMaior === 'SIM') {
-                isCongenita = true;
-            } else if (vdrlMaior === 'NAO') {
-                document.getElementById('divSifExFisico').style.display = 'block';
-                if (exFisico === 'SIM') {
-                    hd = "Criança exposta à sífilis";
-                    condutaArr = [
-                        "Sem necessidade de tratamento imediato",
-                        "Referenciar para seguimento clínico e laboratorial na puericultura"
-                    ];
-                } else if (exFisico === 'NAO') {
-                    document.getElementById('divSifVdrlNR').style.display = 'block';
-                    if (vdrlNR === 'SIM') {
-                        hd = "Avaliação para STORCH (Sífilis descartada inicialmente)";
-                        condutaArr = [
-                            "Realizar investigação para outras afecções STORCH",
-                            "Seguimento clínico e laboratorial na puericultura"
-                        ];
-                    } else if (vdrlNR === 'NAO') {
-                        isCongenita = true;
-                    }
-                }
-            }
-        } else if (tratMae === 'NAO') {
-            isCongenita = true;
-        }
-
-        if (isCongenita) {
-            document.getElementById('divSifExames').style.display = 'block';
-            hd = "Sífilis Congênita";
-            examesReq = "Hemograma completo, glicemia, RX de ossos longos, líquor (celularidade, proteinorraquia e VDRL).";
-
-            if (exTodosNormais === 'SIM') {
-                condutaArr = [
-                    "Notificar caso de Sífilis Congênita",
-                    "Aplicar Benzilpenicilina Benzatina, 50.000 UI/kg, dose única, IM"
-                ];
-            } else if (exTodosNormais === 'AGUARDANDO') {
-                condutaArr = [
-                    "Notificar caso de Sífilis Congênita",
-                    "Aguardar resultado dos exames (Líquor, RX e Hemograma) para definição de esquema terapêutico"
-                ];
-            } else if (exTodosNormais === 'NAO') {
-                document.getElementById('divSifLiquorNormal').style.display = 'block';
-                if (liquorNormal === 'SIM') {
-                    hd = "Sífilis Congênita SEM Neurossífilis";
-                    condutaArr = [
-                        "Notificar caso de Sífilis Congênita",
-                        "Tratamento: Benzilpenicilina Cristalina IV OU Benzilpenicilina Procaína IM, por 10 dias"
-                    ];
-                } else if (liquorNormal === 'NAO') {
-                    hd = "Sífilis Congênita COM Neurossífilis";
-                    condutaArr = [
-                        "Notificar caso de Sífilis Congênita",
-                        "Tratamento: Benzilpenicilina Cristalina IV, por 10 dias"
-                    ];
-                } else {
-                    condutaArr = [
-                        "Notificar caso de Sífilis Congênita",
-                        "Aguardar resultado do líquor para definir esquema terapêutico (Cristalina vs Procaína)"
-                    ];
-                }
-            }
-        }
-
-        const resDiv = document.getElementById('resSifilis');
-        if (hd !== "") {
-            resDiv.style.display = 'block';
-            resDiv.innerHTML = `<strong>HD:</strong> ${hd}<br>`;
-            if (examesReq) resDiv.innerHTML += `<strong>Exames Iniciais:</strong> ${examesReq}<br>`;
-            resDiv.innerHTML += `<strong>Conduta MS:</strong> ${condutaArr.join('. ')}.`;
-        } else {
-            resDiv.style.display = 'none';
-            resDiv.innerHTML = "";
-        }
-
-        window.sifilisOutput = { hd, conduta: condutaArr, examesReq };
-    }
+    // --- 1. FUNÇÕES DE CÁLCULO, FORMULÁRIO E AVISOS CLÍNICOS --- //
 
     function verificarTipoParto() {
         const tipo = document.getElementById('tipoParto').value;
@@ -950,6 +752,7 @@ PELE: sem lesões exantemáticas</textarea>
     function verificarAlertas() {
         let alertasEncontrados = [];
 
+        // Incompatibilidade Sanguínea
         const maeTS = document.getElementById('maeTS').value;
         const rnTS = document.getElementById('rnTS').value;
         if (maeTS.includes('O') && (rnTS.includes('A') || rnTS.includes('B'))) {
@@ -959,6 +762,7 @@ PELE: sem lesões exantemáticas</textarea>
             alertasEncontrados.push("Incompatibilidade Rh");
         }
 
+        // Antropometria
         const pn = parseFloat(document.getElementById('pn').value);
         const pesoHoje = parseFloat(document.getElementById('pesoHoje').value);
         const estatura = parseFloat(document.getElementById('estatura').value);
@@ -969,39 +773,47 @@ PELE: sem lesões exantemáticas</textarea>
             if (pn < 2500) alertasEncontrados.push("Baixo Peso");
             if (pn >= 4000) alertasEncontrados.push("Macrossomia");
         }
+        
         if (pn && pesoHoje) {
             const perda = ((pn - pesoHoje) / pn) * 100;
             if (perda > 10) alertasEncontrados.push("Perda Ponderal > 10%");
         }
+        
         if (estatura) {
             if (estatura < 45) alertasEncontrados.push("Estatura Baixa");
             if (estatura > 55) alertasEncontrados.push("Estatura Alta");
         }
+
         if (pc) {
             if (pc < 33) alertasEncontrados.push("PC Baixo");
             if (pc > 37) alertasEncontrados.push("PC Alto");
         }
+        
         if (pt) {
             if (pt < 30) alertasEncontrados.push("PT Baixo");
             if (pt > 36) alertasEncontrados.push("PT Alto");
         }
 
+        // Diagnósticos e Sorologias do RN
+        const rnVDRL = document.getElementById('rnVDRL').value;
         const rnTR_status = document.getElementById('rnTR_status').value;
+        const rnTR_sifilis = document.getElementById('rnTR_sifilis') ? document.getElementById('rnTR_sifilis').checked : false;
         const rnTR_hiv = document.getElementById('rnTR_hiv') ? document.getElementById('rnTR_hiv').checked : false;
 
+        if (rnVDRL === 'Reagente' || (rnTR_status === 'Reagente' && rnTR_sifilis)) {
+            alertasEncontrados.push("Sífilis congênita");
+        }
         if (rnTR_status === 'Reagente' && rnTR_hiv) {
             alertasEncontrados.push("Exposição perinatal ao HIV");
         }
 
         const box = document.getElementById('alertasIniciais');
         if (alertasEncontrados.length > 0) {
-            box.innerHTML = "📝 <strong>Diagnósticos adicionais mapeados:</strong> " + alertasEncontrados.join(", ");
+            box.innerHTML = "📝 <strong>Diagnósticos adicionais mapeados para o HD:</strong> " + alertasEncontrados.join(", ");
             box.style.display = 'block';
         } else {
             box.style.display = 'none';
         }
-
-        checarVisibilidadeSifilis();
 
         return alertasEncontrados;
     }
@@ -1097,7 +909,7 @@ PELE: sem lesões exantemáticas</textarea>
             rnVDRLStr += ` (Titulação: ${getVal('rnVDRLTitulacao')}, Data: ${formatarData(getVal('rnVDRLData'))})`;
         }
 
-        // Testes Rápidos
+        // Testes Rápidos Strings
         let maeTRStr = getVal('maeTR_status');
         if (maeTRStr === 'Reagente') {
             let reagentesM = [];
@@ -1116,48 +928,12 @@ PELE: sem lesões exantemáticas</textarea>
             rnTRStr = reagentesRN.length > 0 ? `Reagente (${reagentesRN.join(', ')})` : 'Reagente';
         }
 
-        // Lógica da Numeração da Conduta
-        let condutaFinal = getVal('conduta');
-        const moduloVisivel = document.getElementById('moduloSifilisMS').style.display === 'block';
-        
-        let examesSifilisStr = (moduloVisivel && window.sifilisOutput && window.sifilisOutput.examesReq) ? `\n\n<strong>EXAMES SOLICITADOS:</strong>\n- ${window.sifilisOutput.examesReq}\n` : '';
-        let hdSifilisStr = (moduloVisivel && window.sifilisOutput && window.sifilisOutput.hd) ? `, ${window.sifilisOutput.hd}` : '';
-
-        // Se o módulo estiver visível e houver condutas da sífilis, vamos numerá-las na sequência
-        if (moduloVisivel && window.sifilisOutput && window.sifilisOutput.conduta && window.sifilisOutput.conduta.length > 0) {
-            let nextNum = 1;
-            // Expressão regular para achar números no início de linhas, ex: "1-", "2.", "3)"
-            const regex = /^(\d+)[\-\.\)]/gm;
-            let match;
-            while ((match = regex.exec(condutaFinal)) !== null) {
-                nextNum = parseInt(match[1]) + 1;
-            }
-            
-            // Se não encontrou número, mas tem algum texto, assume que o texto digitado é o item 1
-            if (nextNum === 1 && condutaFinal.trim().length > 0) {
-                nextNum = 2;
-            }
-
-            // Garante que não adicione quebra de linha dupla se o texto base não terminar com enter
-            if (condutaFinal.trim().length > 0 && !condutaFinal.endsWith('\n')) {
-                condutaFinal += '\n';
-            }
-
-            // Adiciona as condutas de sífilis numeradas
-            window.sifilisOutput.conduta.forEach(item => {
-                condutaFinal += `${nextNum}- ${item}\n`;
-                nextNum++;
-            });
-            
-            // Remove a última quebra de linha extra
-            condutaFinal = condutaFinal.trimEnd();
-        }
-
+        // Montagem Dinâmica e Acoplada do HD
         const avisosArray = verificarAlertas();
         let hdTextoFinal = `<strong>HD:</strong> ${getVal('hdIdade')}, ${getVal('hdPeso')}, SEXO ${getVal('hdSexo')}`;
-        
-        if (avisosArray.length > 0) hdTextoFinal += `, ${avisosArray.join(', ')}`;
-        hdTextoFinal += hdSifilisStr;
+        if (avisosArray.length > 0) {
+            hdTextoFinal += `, ${avisosArray.join(', ')}`;
+        }
 
         let texto = `<strong>LEITO</strong> ${getVal('leito')} - <strong>${getVal('nome')}</strong>
 
@@ -1183,10 +959,10 @@ Pezinho: ${getVal('pezinho')}
 PESO DE HOJE: ${getVal('pesoHoje')}g - ${getVal('perdaPeso')}
 
 <strong>EXAME FÍSICO:</strong>
-${getVal('exameFisico')}${examesSifilisStr}
+${getVal('exameFisico')}
 
 <strong>CONDUTA:</strong>
-${condutaFinal}`;
+${getVal('conduta')}`;
 
         return texto;
     }
@@ -1327,10 +1103,8 @@ ${condutaFinal}`;
             verificarTR('mae');
             verificarTR('rn');
             verificarAlertas();
-            
-            setTimeout(calcSifilis, 100); 
 
-            setTimeout(gerarRelatorio, 200);
+            gerarRelatorio();
             window.scrollTo({ top: 0, behavior: 'smooth' });
             mostrarToast("✏️ Paciente carregado para edição.");
         }
@@ -1443,8 +1217,8 @@ ${condutaFinal}`;
         document.getElementById('dataNasc').value = dataFormatada;
         
         verificarTipoParto();
-        checarVisibilidadeSifilis(); 
 
+        // Alteração: O modal agora aparece sempre após 1.5s, sem checar o localStorage
         setTimeout(() => { document.getElementById('doacaoModal').classList.add('show'); }, 1500);
     };
 </script>
