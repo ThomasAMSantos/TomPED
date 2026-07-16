@@ -334,6 +334,8 @@
             border-radius: 16px;
             max-width: 440px;
             width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
             text-align: center;
             position: relative;
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
@@ -356,20 +358,47 @@
         }
         .modal-content h3 { margin-top: 0; font-size: 1.4rem; color: var(--text-main); }
         .modal-content p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px; }
-        .pix-card {
-            background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 20px; margin-bottom: 20px;
+        /* --- OnionMed Promotion --- */
+        .onion-feature-item {
+            display: flex; align-items: start; gap: 8px; margin-bottom: 6px;
+            padding: 5px 8px; border-radius: 6px; transition: background-color 0.2s ease, transform 0.2s ease;
         }
-        .pix-img { max-width: 160px; width: 100%; border-radius: 8px; margin: 0 auto 16px auto; border: 1px solid var(--border-color); display: block; }
-        .pix-key-title { margin: 0 0 8px 0 !important; font-weight: 600; font-size: 0.85rem; text-align: left; color: var(--text-main) !important; }
-        .pix-key-container {
-            display: flex; align-items: center; justify-content: space-between;
-            background: var(--bg-panel); padding: 8px 12px; border-radius: 6px;
-            border: 1px solid var(--border-color); gap: 10px; text-align: left;
+        .onion-feature-item:hover {
+            background: rgba(139, 92, 246, 0.08); transform: translateX(4px);
         }
-        .pix-key-container span { font-family: 'Courier New', Courier, monospace; font-size: 0.8rem; word-break: break-all; color: var(--text-main); }
-        .btn-text-muted { background: none; border: none; color: var(--text-muted); font-size: 0.85rem; cursor: pointer; text-decoration: underline; padding: 8px; }
-        .btn-text-muted:hover { color: var(--text-main); }
+        .onion-logo-img {
+            transition: transform 0.3s ease;
+        }
+        .onion-logo-img:hover {
+            transform: scale(1.08) rotate(3deg);
+        }
+        .onion-btn {
+            display: block; text-decoration: none; padding: 11px 18px; font-weight: 700;
+            border-radius: 8px; font-size: 0.88rem; text-align: center;
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); color: white;
+            border: none; cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.35);
+        }
+        .onion-btn:hover {
+            transform: translateY(-2px); box-shadow: 0 6px 16px rgba(139, 92, 246, 0.55);
+            background: linear-gradient(135deg, #9c73f8 0%, #7579f2 100%);
+        }
+        .onion-btn:active {
+            transform: translateY(0);
+        }
+        .support-link.onion-partner {
+            border-color: rgba(139, 92, 246, 0.4);
+            background: rgba(139, 92, 246, 0.08);
+            color: #a78bfa !important;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .support-link.onion-partner:hover {
+            border-color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.15);
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.25);
+            transform: scale(1.02);
+        }
 
         /* --- Footer & Creditos --- */
         .footer {
@@ -388,29 +417,92 @@
         .support-link:hover { border-color: var(--primary); }
         .disclaimer { font-size: 0.75rem; margin-top: 14px; opacity: 0.8; font-style: italic; max-width: 800px; }
         .mt-3 { margin-top: 16px; }
+
+        /* --- Responsividade Geral --- */
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: center;
+                text-align: center;
+                padding-bottom: 16px;
+            }
+            .logo-container {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .logo-text {
+                text-align: center;
+            }
+            .panel {
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal-content {
+                padding: 24px 16px;
+            }
+            .modal-content h3 {
+                font-size: 1.3rem;
+            }
+            .onion-btn {
+                padding: 12px 16px;
+                font-size: 0.85rem;
+            }
+            #themeText {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
 
 <div id="doacaoModal" class="modal-overlay">
-    <div class="modal-content">
-        <button class="modal-close" onclick="fecharModal()" title="Fechar">&times;</button>
+    <div class="modal-content" style="max-width: 400px; padding: 20px 24px; border: 1px solid rgba(139, 92, 246, 0.25); background: linear-gradient(180deg, var(--bg-panel) 0%, rgba(15, 23, 42, 0.95) 100%);">
+        <button class="modal-close" onclick="fecharModal()" title="Fechar" style="top: 12px; right: 12px;">&times;</button>
         
-        <div class="modal-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-        </div>
-
-        <h3>Apoie o Tomped</h3>
-        <p>O Tomped é uma ferramenta gratuita desenvolvida para otimizar o tempo nas evoluções pediátricas. Considere apoiar o projeto para ajudar a custear os servidores e manter a plataforma livre de anúncios.</p>
-        
-        <div class="pix-card">
-            <img src="pix.jpeg" alt="QR Code Pix" class="pix-img">
-            <p class="pix-key-title">Chave Pix Copia e Cola:</p>
-            <div class="pix-key-container">
-                <span id="chavePix">f9678712-6ad5-4d43-93e9-a8675b03ca34</span>
-                <button class="btn-primary" onclick="copiarChavePix()" style="padding: 6px 12px; font-size: 0.8rem; border-radius: 4px;">Copiar</button>
+        <div style="margin-bottom: 12px; display: flex; justify-content: center;">
+            <div style="position: relative; display: inline-block;">
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50px; height: 50px; background: rgba(139, 92, 246, 0.35); border-radius: 50%; filter: blur(15px); z-index: 1;"></div>
+                <img src="https://www.onionmed.com.br/OnionMed.png" alt="OnionMed Logo" style="width: 56px; height: 56px; object-fit: contain; position: relative; z-index: 2;" class="onion-logo-img">
             </div>
         </div>
+
+        <h3 style="margin: 0 0 4px 0; font-size: 1.35rem; font-weight: 800; background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">OnionMed</h3>
+        <div style="font-size: 0.75rem; font-weight: 700; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">Residência Médica & Concursos</div>
+        
+        <p style="color: var(--text-muted); font-size: 0.82rem; line-height: 1.5; margin-bottom: 14px; padding: 0 5px;">
+            Turbine seus estudos com a plataforma de questões mais moderna e veloz do mercado médico. Poupe seu tempo e foque no que realmente importa.
+        </p>
+        
+        <div style="text-align: left; margin-bottom: 16px; background: rgba(139, 92, 246, 0.03); border: 1px solid rgba(139, 92, 246, 0.12); border-radius: 10px; padding: 10px 12px 2px 12px;">
+            <div class="onion-feature-item">
+                <span style="font-size: 1rem; margin-top: 1px; filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.3));">⚡</span>
+                <div>
+                    <strong style="display: block; font-size: 0.8rem; color: var(--text-main); margin-bottom: 1px;">Velocidade Instantânea</strong>
+                    <span style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.3; display: block;">Busca inteligente, filtros e respostas em milissegundos. Sem lentidão.</span>
+                </div>
+            </div>
+            <div class="onion-feature-item">
+                <span style="font-size: 1rem; margin-top: 1px; filter: drop-shadow(0 2px 4px rgba(16, 185, 129, 0.3));">🧠</span>
+                <div>
+                    <strong style="display: block; font-size: 0.8rem; color: var(--text-main); margin-bottom: 1px;">Revisão Espaçada Híbrida</strong>
+                    <span style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.3; display: block;">Algoritmo avançado baseado no SM-2 para focar exatamente onde você erra.</span>
+                </div>
+            </div>
+            <div class="onion-feature-item">
+                <span style="font-size: 1rem; margin-top: 1px; filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.3));">📚</span>
+                <div>
+                    <strong style="display: block; font-size: 0.8rem; color: var(--text-main); margin-bottom: 1px;">+200.000 Questões Médicas</strong>
+                    <span style="font-size: 0.72rem; color: var(--text-muted); line-height: 1.3; display: block;">Banco completo cobrindo as principais bancas e concursos do país.</span>
+                </div>
+            </div>
+        </div>
+
+        <a href="https://www.onionmed.com.br/" target="_blank" class="onion-btn">
+            Começar a Estudar Agora (Grátis)
+        </a>
     </div>
 </div>
 
@@ -744,9 +836,9 @@ PELE: sem lesões exantemáticas</textarea>
         <p>
             Instagram: <a href="https://instagram.com/thomask_machado" target="_blank">@thomask_machado</a>
         </p>
-        <button class="support-link" onclick="abrirModalManual()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-            Apoiar o Projeto
+        <button class="support-link onion-partner" onclick="abrirModalManual()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+            Parceiro: OnionMed
         </button>
         <p class="disclaimer">
             Aviso Legal: Esta ferramenta tem como finalidade auxiliar e agilizar a rotina, não substituindo o raciocínio clínico. O criador não se responsabiliza por possíveis erros, omissões ou falhas nos cálculos. Cada usuário/profissional é inteiramente responsável por conferir a exatidão dos dados inseridos e gerados antes de anexá-los a qualquer prontuário oficial.
@@ -759,18 +851,10 @@ PELE: sem lesões exantemáticas</textarea>
 <script>
     window.sifilisOutput = {}; 
 
-    // --- FUNÇÕES DO MODAL DOAÇÃO --- //
+    // --- FUNÇÕES DO MODAL ONIONMED --- //
     function fecharModal() { document.getElementById('doacaoModal').classList.remove('show'); }
     
     function abrirModalManual() { document.getElementById('doacaoModal').classList.add('show'); }
-    
-    function copiarChavePix() {
-        const chave = document.getElementById('chavePix').innerText;
-        navigator.clipboard.writeText(chave).then(() => {
-            mostrarToast("✅ Chave Pix copiada!");
-            setTimeout(fecharModal, 2000); 
-        }).catch(() => { mostrarToast("❌ Erro ao copiar chave."); });
-    }
 
     // --- 0. GESTÃO DO TEMA (DARK/LIGHT MODE) --- //
     function initTheme() {
