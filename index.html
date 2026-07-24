@@ -810,16 +810,15 @@
                 <button type="button" class="tag" onclick="addTag('exameFisico', 'Desconforto respiratório leve')">+ Desconf. Resp.</button>
                 <button type="button" class="tag" onclick="addTag('exameFisico', 'Coto umbilical com secreção')">+ Coto Alterado</button>
             </div>
-            <textarea id="exameFisico">BEG, eupneico, ativo e reativo, acianótico, afebril, anictérico
-Bregma plana e normotensa. Orelhas normas implantadas.
-Palato íntegro. Clavículas íntegras.
-AP: MV+ SRA
-ACV: BNF RCR 2T SS
-Abdome: Simétrico, normotimpânico, sem visceromegalias, sem sinais de defesa abdominal. Coto umbilical gelatinoso com bom aspecto, sem sinais flogísticos.
-AGU: GENITÁLIA TÍPICA FEMININA. ÂNUS PÉRVIO.
-Extremidades: Simétricas. Hálux sem alteração. Ortolani Negativo bilateralmente.
-Reflexos primitivos presentes e normais.
-PELE: Sem lesões exantemáticas</textarea>
+            <textarea id="exameFisico">Recém-nascido em bom estado geral, ativo, reativo, eupneico, afebril, acianótico e anictérico.
+-  NEUROLÓGICO: Fontanela anterior (bregma) plana e normotensa. Reflexos primitivos presentes, simétricos e adequados para a idade.
+-  CABEÇA E PESCOÇO: Crânio sem deformidades. Orelhas normoimplantadas. Palato íntegro. Clavículas íntegras, sem crepitações.
+-  AP: Murmúrio vesicular presente bilateralmente, sem ruídos adventícios.
+-  ACV: Bulhas normofonéticas em dois tempos, ritmo cardíaco regular, sem sopros.
+-  ABDOME: Plano, flácido, normotenso, ruídos hidroaéreos presentes, sem visceromegalias ou dor à palpação. Coto umbilical de aspecto gelatinoso, sem sinais flogísticos.
+-  GENITURINÁRIO: Genitália feminina tópica, sem alterações. Ânus pérvio.
+-  SISTEMA MUSCULOESQUELÉTICO: Extremidades simétricas e bem perfundidas. Ortolani e Barlow negativos bilateralmente. Hálux sem alterações.
+-  PELE: Íntegra, corada, sem lesões cutâneas ou exantemáticas.</textarea>
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
                 <label style="margin: 0;">Conduta</label>
@@ -1169,34 +1168,40 @@ PELE: Sem lesões exantemáticas</textarea>
         const textarea = document.getElementById('exameFisico');
         const sexo = document.getElementById('hdSexo').value;
         
-        let genitalia = "AGU: GENITÁLIA TÍPICA. ÂNUS PÉRVIO.";
-        if (sexo === 'FEMININO') {
-            genitalia = "AGU: GENITÁLIA TÍPICA FEMININA. ÂNUS PÉRVIO.";
-        } else if (sexo === 'MASCULINO') {
-            genitalia = "AGU: GENITÁLIA TÍPICA MASCULINA. ÂNUS PÉRVIO.";
-        }
+        let genitalia = "-  GENITURINÁRIO: Genitália típica. Ânus pérvio.";
         
         if (modelo === 'RNT') {
-            textarea.value = `BEG, eupneico, ativo e reativo, acianótico, afebril, anictérico
-Bregma plana e normotensa. Orelhas normas implantadas.
-Palato íntegro. Clavículas íntegras.
-AP: MV+ SRA
-ACV: BNF RCR 2T SS
-Abdome: Simétrico, normotimpânico, sem visceromegalias, sem sinais de defesa abdominal. Coto umbilical gelatinoso com bom aspecto, sem sinais flogísticos.
+            if (sexo === 'FEMININO') {
+                genitalia = "-  GENITURINÁRIO: Genitália feminina tópica, sem alterações. Ânus pérvio.";
+            } else if (sexo === 'MASCULINO') {
+                genitalia = "-  GENITURINÁRIO: Genitália masculina tópica, testículos tópicos bilateralmente em bolsa escrotal, sem alterações. Ânus pérvio.";
+            }
+            
+            textarea.value = `Recém-nascido em bom estado geral, ativo, reativo, eupneico, afebril, acianótico e anictérico.
+-  NEUROLÓGICO: Fontanela anterior (bregma) plana e normotensa. Reflexos primitivos presentes, simétricos e adequados para a idade.
+-  CABEÇA E PESCOÇO: Crânio sem deformidades. Orelhas normoimplantadas. Palato íntegro. Clavículas íntegras, sem crepitações.
+-  AP: Murmúrio vesicular presente bilateralmente, sem ruídos adventícios.
+-  ACV: Bulhas normofonéticas em dois tempos, ritmo cardíaco regular, sem sopros.
+-  ABDOME: Plano, flácido, normotenso, ruídos hidroaéreos presentes, sem visceromegalias ou dor à palpação. Coto umbilical de aspecto gelatinoso, sem sinais flogísticos.
 ${genitalia}
-Extremidades: Simétricas. Hálux sem alteração. Ortolani Negativo bilateralmente.
-Reflexos primitivos presentes e normais.
-PELE: Sem lesões exantemáticas`;
+-  SISTEMA MUSCULOESQUELÉTICO: Extremidades simétricas e bem perfundidas. Ortolani e Barlow negativos bilateralmente. Hálux sem alterações.
+-  PELE: Íntegra, corada, sem lesões cutâneas ou exantemáticas.`;
         } else if (modelo === 'RNPT') {
-            textarea.value = `REG/BEG, eupneico/taquipneico leve, reativo ao manuseio, acianótico, afebril, anictérico
-Bregma plana e normotensa. Orelhas com cartilagem fina.
-Palato íntegro. Clavículas íntegras.
-AP: MV+ SRA (ou leve tiragem intercostal)
-ACV: BNF RCR 2T SS
-Abdome: Simétrico, flácido, sem visceromegalias. Coto umbilical com bom aspecto.
+            if (sexo === 'FEMININO') {
+                genitalia = "-  GENITURINÁRIO: Genitália típica feminina. Ânus pérvio.";
+            } else if (sexo === 'MASCULINO') {
+                genitalia = "-  GENITURINÁRIO: Genitália típica masculina. Ânus pérvio.";
+            }
+
+            textarea.value = `REG/BEG, eupneico/taquipneico leve, reativo ao manuseio, acianótico, afebril, anictérico.
+-  NEUROLÓGICO: Bregma plana e normotensa. Reflexos adequados para a idade gestacional.
+-  CABEÇA E PESCOÇO: Crânio sem deformidades. Orelhas com cartilagem fina. Palato íntegro. Clavículas íntegras.
+-  AP: Murmúrio vesicular presente bilateralmente, sem ruídos adventícios (ou leve tiragem intercostal).
+-  ACV: Bulhas normofonéticas em dois tempos, ritmo cardíaco regular, sem sopros.
+-  ABDOME: Simétrico, flácido, sem visceromegalias. Coto umbilical com bom aspecto.
 ${genitalia}
-Extremidades: Simétricas, tônus e reflexos adequados para a idade gestacional.
-PELE: fina, gelatinosa, sem lesões.`;
+-  SISTEMA MUSCULOESQUELÉTICO: Extremidades simétricas.
+-  PELE: Fina, gelatinosa, sem lesões.`;
         } else if (modelo === 'BRANCO') {
             textarea.value = "";
         }
@@ -1266,22 +1271,40 @@ PELE: fina, gelatinosa, sem lesões.`;
         if (!textarea) return;
         
         let texto = textarea.value;
-        let novaGenitalia = "AGU: GENITÁLIA TÍPICA. ÂNUS PÉRVIO.";
-        if (sexo === 'FEMININO') {
-            novaGenitalia = "AGU: GENITÁLIA TÍPICA FEMININA. ÂNUS PÉRVIO.";
-        } else if (sexo === 'MASCULINO') {
-            novaGenitalia = "AGU: GENITÁLIA TÍPICA MASCULINA. ÂNUS PÉRVIO.";
+        const modelo = document.getElementById('modeloExameFisico').value;
+        
+        let novaGenitalia = "-  GENITURINÁRIO: Genitália típica. Ânus pérvio.";
+        
+        if (modelo === 'RNT') {
+            if (sexo === 'FEMININO') {
+                novaGenitalia = "-  GENITURINÁRIO: Genitália feminina tópica, sem alterações. Ânus pérvio.";
+            } else if (sexo === 'MASCULINO') {
+                novaGenitalia = "-  GENITURINÁRIO: Genitália masculina tópica, testículos tópicos bilateralmente em bolsa escrotal, sem alterações. Ânus pérvio.";
+            }
+        } else {
+            // default or RNPT
+            if (sexo === 'FEMININO') {
+                novaGenitalia = "-  GENITURINÁRIO: Genitália típica feminina. Ânus pérvio.";
+            } else if (sexo === 'MASCULINO') {
+                novaGenitalia = "-  GENITURINÁRIO: Genitália típica masculina. Ânus pérvio.";
+            }
         }
         
-        const regex = /AGU:\s*Genitália\s*típica\s*(feminina|masculina)?\.\s*Ânus\s*pérvio\./i;
+        const regex = /-\s*GENITURINÁRIO:\s*[^\n]*/i;
         if (regex.test(texto)) {
             texto = texto.replace(regex, novaGenitalia);
         } else {
-            const lines = texto.split('\n');
-            let index = lines.findIndex(line => line.toUpperCase().startsWith('AGU:'));
-            if (index !== -1) {
-                lines[index] = novaGenitalia;
-                texto = lines.join('\n');
+            // support old style AGU line replacement too just in case
+            const regexOld = /AGU:\s*[^\n]*/i;
+            if (regexOld.test(texto)) {
+                texto = texto.replace(regexOld, novaGenitalia);
+            } else {
+                const lines = texto.split('\n');
+                let index = lines.findIndex(line => line.toUpperCase().includes('GENITURINÁRIO:') || line.toUpperCase().startsWith('AGU:'));
+                if (index !== -1) {
+                    lines[index] = novaGenitalia;
+                    texto = lines.join('\n');
+                }
             }
         }
         textarea.value = texto;
