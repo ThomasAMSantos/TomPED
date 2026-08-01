@@ -460,7 +460,6 @@
 
 <div id="doacaoModal" class="modal-overlay">
     <div class="modal-content" style="max-width: 400px; padding: 20px 24px; border: 1px solid rgba(139, 92, 246, 0.25); background: linear-gradient(180deg, var(--bg-panel) 0%, rgba(15, 23, 42, 0.95) 100%);">
-        <button id="btnFecharModal" class="modal-close" onclick="fecharModal()" title="Fechar" style="top: 12px; right: 12px;" disabled>&times;</button>
         
         <div style="margin-bottom: 12px; display: flex; justify-content: center;">
             <div style="position: relative; display: inline-block;">
@@ -500,7 +499,7 @@
             </div>
         </div>
 
-        <a href="https://www.onionmed.com.br/" target="_blank" class="onion-btn">
+        <a href="https://www.onionmed.com.br/" target="_blank" class="onion-btn" onclick="fecharModal()">
             Começar a Estudar Agora (Grátis)
         </a>
     </div>
@@ -913,39 +912,6 @@
     
     function abrirModalManual() {
         document.getElementById('doacaoModal').classList.add('show');
-        iniciarTemporizadorFechar();
-    }
-
-    function iniciarTemporizadorFechar() {
-        const btnFechar = document.getElementById('btnFecharModal');
-        if (!btnFechar) return;
-
-        if (onionTimer) {
-            clearInterval(onionTimer);
-        }
-
-        let tempoRestante = 10;
-        btnFechar.disabled = true;
-        btnFechar.style.pointerEvents = 'none';
-        btnFechar.style.opacity = '0.5';
-        btnFechar.style.fontSize = '0.9rem';
-        btnFechar.style.fontWeight = '700';
-        btnFechar.innerHTML = tempoRestante;
-
-        onionTimer = setInterval(() => {
-            tempoRestante--;
-            if (tempoRestante > 0) {
-                btnFechar.innerHTML = tempoRestante;
-            } else {
-                clearInterval(onionTimer);
-                onionTimer = null;
-                btnFechar.disabled = false;
-                btnFechar.style.pointerEvents = 'auto';
-                btnFechar.style.opacity = '1';
-                btnFechar.style.fontSize = '1.2rem';
-                btnFechar.innerHTML = '&times;';
-            }
-        }, 1000);
     }
 
     // --- 0. GESTÃO DO TEMA (DARK/LIGHT MODE) --- //
@@ -1739,7 +1705,6 @@ ${condutaFinal}`;
 
         setTimeout(() => {
             document.getElementById('doacaoModal').classList.add('show');
-            iniciarTemporizadorFechar();
         }, 1500);
     };
 </script>
